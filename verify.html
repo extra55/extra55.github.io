@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
+  <meta charset="UTF-8">
   <title>تأكيد الرمز</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -13,7 +14,7 @@
   <p class="msg" id="msg"></p>
 </div>
 
-  <style>
+<style>
 body {
   font-family: Arial, sans-serif;
   background: #f4f6f9;
@@ -61,15 +62,25 @@ button:hover {
   text-align: center;
   margin-top: 10px;
 }
-
 </style>
 
 <script>
 const API = "PUT_SCRIPT_URL_HERE";
 const phone = localStorage.getItem("phone");
 
+// حماية: إذا ماكو رقم هاتف يرجع لصفحة التسجيل
+if (!phone) {
+  window.location.href = "auth.html";
+}
+
 function verifyOTP() {
-  const otp = document.getElementById("otp").value;
+  const otp = document.getElementById("otp").value.trim();
+  const msg = document.getElementById("msg");
+
+  if (otp === "") {
+    msg.innerText = "❌ أدخل رمز التحقق";
+    return;
+  }
 
   fetch(API, {
     method: "POST",
@@ -82,10 +93,18 @@ function verifyOTP() {
   })
   .then(r => r.json())
   .then(d => {
-    document.getElementById("msg").innerText = d.message;
+    msg.innerText = d.message;
+
     if (d.status === "success") {
-      location.href = "dashboard.html";
+      // ✅ نحفظ حالة الدخول
+      localStorage.setItem("loggedIn", "true");
+
+      // ✅ نوجّه المستخدم
+      window.location.href = "booking.html";
     }
+  })
+  .catch(() => {
+    msg.innerText = "⚠️ فشل الاتصال بالسيرفر";
   });
 }
 </script>
