@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
-  <title>تسجيل حساب</title>
+  <meta charset="UTF-8">
+  <title>تسجيل / دخول</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <h2>تسجيل حساب جديد</h2>
+  <h2>تسجيل / دخول</h2>
+  <p class="subtitle">أدخل رقم هاتفك وسيصلك رمز التحقق</p>
+
   <input type="text" id="phone" placeholder="رقم الهاتف (11 رقم)">
-  <button onclick="requestOTP()">إرسال الرمز</button>
+  <button onclick="sendOTP()">إرسال رمز التحقق</button>
+
   <p class="msg" id="msg"></p>
 </div>
 
-<style>
+  <style>
 body {
   font-family: Arial, sans-serif;
   background: #f4f6f9;
@@ -67,8 +71,14 @@ button:hover {
 <script>
 const API = "PUT_SCRIPT_URL_HERE";
 
-function requestOTP() {
-  const phone = document.getElementById("phone").value;
+function sendOTP() {
+  const phone = document.getElementById("phone").value.trim();
+  const msg = document.getElementById("msg");
+
+  if (!/^\d{11}$/.test(phone)) {
+    msg.innerText = "❌ رقم الهاتف يجب أن يكون 11 رقم";
+    return;
+  }
 
   fetch(API, {
     method: "POST",
@@ -78,13 +88,18 @@ function requestOTP() {
       phone: phone
     })
   })
-  .then(r => r.json())
-  .then(d => {
-    document.getElementById("msg").innerText = d.message;
-    if (d.status === "success") {
+  .then(res => res.json())
+  .then(data => {
+    msg.innerText = data.message;
+    if (data.status === "success") {
       localStorage.setItem("phone", phone);
-      setTimeout(()=>location.href="verify.html",1000);
+      setTimeout(() => {
+        window.location.href = "verify.html";
+      }, 1000);
     }
+  })
+  .catch(() => {
+    msg.innerText = "⚠️ فشل الاتصال بالسيرفر";
   });
 }
 </script>
