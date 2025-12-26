@@ -1,159 +1,123 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>حجز موعد | MyClinic</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #0d6efd, #20c997);
-    margin: 0;
-    padding: 0;
-    direction: rtl;
-  }
-
-  .container {
-    max-width: 420px;
-    margin: 60px auto;
-    background: #fff;
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.2);
-  }
-
-  h2 {
-    text-align: center;
-    color: #0d6efd;
-    margin-bottom: 20px;
-  }
-
-  label {
-    font-size: 14px;
-    margin-top: 10px;
-    display: block;
-    color: #555;
-  }
-
-  input, select {
-    width: 100%;
-    padding: 12px;
-    margin-top: 6px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    font-size: 15px;
-  }
-
-  input:focus, select:focus {
-    outline: none;
-    border-color: #0d6efd;
-  }
-
-  button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 14px;
-    background: #0d6efd;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background: #0b5ed7;
-  }
-
-  .footer {
-    text-align: center;
-    font-size: 13px;
-    color: #888;
-    margin-top: 15px;
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>حجز موعد</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <div class="container">
-  <h2>🩺 حجز موعد طبي</h2>
+  <h2>حجز موعد طبي</h2>
 
-  <label>اسم المريض</label>
-  <input id="name" placeholder="أدخل اسمك الكامل">
-
-  <label>رقم الهاتف</label>
-  <input id="phone" placeholder="07XXXXXXXX">
-
-  <label>اختر الطبيب</label>
   <select id="doctor">
-    <option value="1">د. أحمد – قلب</option>
+    <option value="">اختر الطبيب</option>
+    <option value="1">د. أحمد – باطنية</option>
     <option value="2">د. علي – أسنان</option>
+    <option value="3">د. سارة – نسائية</option>
   </select>
 
-  <label>تاريخ الموعد</label>
-  <input id="date" type="date">
+  
+  <input type="text" id="name" placeholder="اسم المريض">
+  <input type="date" id="date">
 
-  <button onclick="book()">📅 تأكيد الحجز</button>
+  <button onclick="book()">تأكيد الحجز</button>
 
-  <div class="footer">
-    سيتم التواصل معك لتأكيد الموعد
-  </div>
+  <p class="msg" id="msg"></p>
 </div>
 
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+}
 
-  <script>
-  const today = new Date().toISOString().split("T")[0];
-  document.getElementById("date").setAttribute("min", today);
+.container {
+  max-width: 400px;
+  margin: 80px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,.1);
+}
 
-  function book() {
-    const name = document.getElementById("name").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const date = document.getElementById("date").value;
-    const doctor = document.getElementById("doctor").value;
+h2 {
+  text-align: center;
+  color: #0d6efd;
+}
 
-    if (!name || !phone || !date) {
-      alert("⚠️ يرجى ملء جميع الحقول");
-      return;
-    }
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
 
-    if (!/^\d{11}$/.test(phone)) {
-      alert("❌ رقم الهاتف يجب أن يكون 11 رقم فقط");
-      return;
-    }
+button {
+  width: 100%;
+  padding: 12px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    fetch("https://script.google.com/macros/s/AKfycbwNgKVXE6KxRx4cu5HdEKCZ_TTNO0oI3LqRzhp7CkKO-8p06ytRbzjvBAIYQgTrP-A7/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        doctor_id: doctor,
-        patient_name: name,
-        phone: phone,
-        date: date
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "success") {
-        alert("✅ تم الحجز بنجاح");
+button:hover {
+  background: #084298;
+}
 
-        // ✅ تفريغ الحقول بعد الحجز
-        document.getElementById("name").value = "";
-        document.getElementById("phone").value = "";
-        document.getElementById("date").value = "";
-        document.getElementById("doctor").selectedIndex = 0;
+.msg {
+  text-align: center;
+  margin-top: 10px;
+}
 
-      } else {
-        alert("❌ " + data.message);
-      }
-    })
-    .catch(() => {
-      alert("❌ فشل الاتصال بالسيرفر");
-    });
+</style>
+
+<script>
+const API = "PUT_SCRIPT_URL_HERE";
+const phone = localStorage.getItem("phone");
+
+if (!phone) {
+  alert("يجب تسجيل الدخول أولاً");
+  location.href = "signup.html";
+}
+
+function book() {
+  const doctor = document.getElementById("doctor").value;
+  const date   = document.getElementById("date").value;
+  const name   = document.getElementById("name").value;
+
+  if (!doctor || !date || !name) {
+    document.getElementById("msg").innerText = "يرجى ملء جميع الحقول";
+    return;
   }
+
+  fetch(API, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      action: "booking",
+      doctor_id: doctor,
+      patient_name: name,
+      phone: phone,
+      date: date
+    })
+  })
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById("msg").innerText = d.message;
+    if (d.status === "success") {
+      document.getElementById("name").value = "";
+    }
+  })
+  .catch(() => {
+    document.getElementById("msg").innerText = "فشل الاتصال بالسيرفر";
+  });
+}
 </script>
 
 </body>
