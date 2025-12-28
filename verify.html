@@ -9,66 +9,17 @@
 
 <div class="container">
   <h2>تأكيد الرمز</h2>
-  <input type="text" id="otp" placeholder="رمز التحقق">
+
+  <input type="text" id="otp" placeholder="أدخل رمز التحقق">
   <button onclick="verifyOTP()">تأكيد</button>
+
   <p class="msg" id="msg"></p>
 </div>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
-  margin: 0;
-}
-
-.container {
-  max-width: 400px;
-  margin: 80px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,.1);
-}
-
-h2 {
-  text-align: center;
-  color: #0d6efd;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #0d6efd;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #084298;
-}
-
-.msg {
-  text-align: center;
-  margin-top: 10px;
-}
-</style>
-
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwsEnugYxbuPBou6LueU-_TUTS1NhKMQKQR8EugiWYLyYSJHdF4UeZDJyRp4K5QypHt/exec";
+const API = "https://script.google.com/macros/s/AKfycbyA9MIXlF-IKWhH5VWWbwl9p436eoBoDjXDYT-05CAU-7BrXJEFUKpF75sj1kAWzXu8/exec";
 const phone = localStorage.getItem("phone");
 
-// حماية: إذا ماكو رقم هاتف يرجع لصفحة التسجيل
 if (!phone) {
   window.location.href = "auth.html";
 }
@@ -78,33 +29,31 @@ function verifyOTP() {
   const msg = document.getElementById("msg");
 
   if (otp === "") {
-    msg.innerText = "❌ أدخل رمز التحقق";
+    msg.innerText = "❌ أدخل الرمز";
     return;
   }
 
+  const data = new URLSearchParams();
+  data.append("action", "verify_otp");
+  data.append("phone", phone);
+  data.append("otp", otp);
+
   fetch(API, {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      action: "verify_otp",
-      phone: phone,
-      otp: otp
-    })
+    body: data
   })
-  .then(r => r.json())
-  .then(d => {
-    msg.innerText = d.message;
+  .then(r => r.text())
+  .then(res => {
+    const [status, message] = res.split("|");
+    msg.innerText = message;
 
-    if (d.status === "success") {
-      // ✅ نحفظ حالة الدخول
+    if (status === "success") {
       localStorage.setItem("loggedIn", "true");
-
-      // ✅ نوجّه المستخدم
       window.location.href = "booking.html";
     }
   })
   .catch(() => {
-    msg.innerText = "⚠️ فشل الاتصال بالسيرفر";
+    msg.innerText = "فشل الاتصال بالسيرفر";
   });
 }
 </script>
