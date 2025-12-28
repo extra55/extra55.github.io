@@ -5,7 +5,6 @@
   <title>حجز موعد</title>
   <link rel="stylesheet" href="style.css">
 
-  <!-- حماية الصفحة -->
   <script>
     if (localStorage.getItem("loggedIn") !== "true") {
       window.location.href = "auth.html";
@@ -17,7 +16,6 @@
 <div class="container">
   <h2>حجز موعد طبي</h2>
 
-  <label>الطبيب</label>
   <select id="doctor">
     <option value="">اختر الطبيب</option>
     <option value="د. أحمد – باطنية">د. أحمد – باطنية</option>
@@ -25,127 +23,57 @@
     <option value="د. سارة – نسائية">د. سارة – نسائية</option>
   </select>
 
-  <label>اسم المريض</label>
   <input type="text" id="name" placeholder="اسم المريض">
-
-  <label>تاريخ الحجز</label>
   <input type="date" id="date">
 
   <button onclick="book()">تأكيد الحجز</button>
+  <button onclick="logout()" style="margin-top:10px;background:#6c757d;">تسجيل خروج</button>
 
   <p class="msg" id="msg"></p>
-
-  <button class="logout" onclick="logout()">تسجيل خروج</button>
 </div>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
-  margin: 0;
-}
-
-.container {
-  max-width: 420px;
-  margin: 80px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,.1);
-}
-
-h2 {
-  text-align: center;
-  color: #0d6efd;
-  margin-bottom: 20px;
-}
-
-label {
-  font-size: 14px;
-  color: #555;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  background: #0d6efd;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #084298;
-}
-
-.logout {
-  margin-top: 15px;
-  background: #6c757d;
-}
-
-.logout:hover {
-  background: #495057;
-}
-
-.msg {
-  text-align: center;
-  margin-top: 10px;
-}
-</style>
-
 <script>
-const API = "https://script.google.com/macros/s/AKfycbwsEnugYxbuPBou6LueU-_TUTS1NhKMQKQR8EugiWYLyYSJHdF4UeZDJyRp4K5QypHt/exec";
+const API = "https://script.google.com/macros/s/AKfycbyA9MIXlF-IKWhH5VWWbwl9p436eoBoDjXDYT-05CAU-7BrXJEFUKpF75sj1kAWzXu8/exec";
 const phone = localStorage.getItem("phone");
 
-// منع اختيار تواريخ قديمة
 const dateInput = document.getElementById("date");
-const today = new Date().toISOString().split("T")[0];
-dateInput.min = today;
+dateInput.min = new Date().toISOString().split("T")[0];
 
 function book() {
   const doctor = document.getElementById("doctor").value;
-  const date   = dateInput.value;
-  const name   = document.getElementById("name").value.trim();
-  const msg    = document.getElementById("msg");
+  const name = document.getElementById("name").value.trim();
+  const date = dateInput.value;
+  const msg = document.getElementById("msg");
 
-  if (!doctor || !date || !name) {
+  if (!doctor || !name || !date) {
     msg.innerText = "❌ يرجى ملء جميع الحقول";
     return;
   }
 
+  const data = new URLSearchParams();
+  data.append("action", "booking");
+  data.append("doctor", doctor);
+  data.append("patient_name", name);
+  data.append("phone", phone);
+  data.append("date", date);
+
   fetch(API, {
     method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      action: "booking",
-      doctor: doctor,
-      patient_name: name,
-      phone: phone,
-      date: date
-    })
+    body: data
   })
-  .then(r => r.json())
-  .then(d => {
-    msg.innerText = d.message;
+  .then(r => r.text())
+  .then(res => {
+    const [status, message] = res.split("|");
+    msg.innerText = message;
 
-    if (d.status === "success") {
-      document.getElementById("name").value = "";
+    if (status === "success") {
       document.getElementById("doctor").value = "";
+      document.getElementById("name").value = "";
       dateInput.value = "";
     }
   })
   .catch(() => {
-    msg.innerText = "⚠️ فشل الاتصال بالسيرفر";
+    msg.innerText = "فشل الاتصال بالسيرفر";
   });
 }
 
