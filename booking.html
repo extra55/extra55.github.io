@@ -105,6 +105,19 @@ button:hover {
 </style>
 
 <script>
+if (!localStorage.getItem("loggedIn")) {
+  window.location.replace("auth.html");
+}
+
+  
+// منع الرجوع للصفحة بعد تسجيل الخروج
+window.addEventListener("pageshow", function () {
+  if (!localStorage.getItem("loggedIn")) {
+    window.location.replace("auth.html");
+  }
+});
+
+  
 function confirmLogout() {
   const ok = confirm("هل أنت متأكد من تسجيل الخروج؟");
 
