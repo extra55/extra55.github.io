@@ -2,25 +2,19 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>تسجيل الدخول</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="container">
   <h2>تسجيل الدخول</h2>
   <p>أدخل رقم هاتفك وسيصلك رمز التحقق</p>
-
   <input type="text" id="phone" placeholder="رقم الهاتف (11 رقم)">
   <button onclick="sendOTP()">إرسال الرمز</button>
-
   <p class="msg" id="msg"></p>
 </div>
-
 <script>
-
   if (localStorage.getItem("loggedIn")) {
   window.location.replace("booking.html");
 }
@@ -67,4 +61,5 @@ function sendOTP() {
 
 </body>
 </html>
+
 
