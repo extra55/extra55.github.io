@@ -21,40 +21,48 @@
 const API = "https://script.google.com/macros/s/AKfycbyonWgHXVMOMsl-hz87p8w04T9oOzNjNxTS1CTR1Nf19t7Q-B1Cg7uE95891M3G5lFl/exec";
 
 function sendOTP() {
-  const phone = document.getElementById("phone").value.trim();
+  const phone = document.getElementById("phone").value;
   const msg = document.getElementById("msg");
 
+  msg.innerText = "";
+
+  // تحقق من الرقم (11 رقم)
   if (!/^\d{11}$/.test(phone)) {
-    msg.innerText = "❌ رقم الهاتف يجب أن يكون 11 رقم";
+    msg.innerText = "رقم الهاتف يجب أن يكون 11 رقم";
     return;
   }
 
-  const data = new URLSearchParams();
-  data.append("action", "request_otp");
-  data.append("phone", phone);
-
   fetch(API, {
     method: "POST",
-    body: data
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "send_otp",
+      phone: phone
+    })
   })
-  .then(r => r.text())
-  .then(res => {
-    const [status, message] = res.split("|");
-    msg.innerText = message;
+  .then(response => response.json()) // 🔴 مهم جدًا
+  .then(data => {
+    console.log(data); // للفحص
+    msg.innerText = data.message;
 
-    if (status === "success") {
+    if (data.status === "success") {
       localStorage.setItem("phone", phone);
       window.location.href = "verify.html";
     }
   })
-  .catch(() => {
+  .catch(error => {
+    console.error(error);
     msg.innerText = "فشل الاتصال بالسيرفر";
   });
 }
 </script>
 
+
 </body>
 </html>
+
 
 
 
