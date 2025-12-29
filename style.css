@@ -1,47 +1,112 @@
+/* ===== Reset ===== */
+* {
+  box-sizing: border-box;
+}
+
+/* ===== Body ===== */
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+  background: linear-gradient(135deg, #eef2f7, #f9fbff);
   margin: 0;
+  padding: 0;
+  direction: rtl;
 }
 
+/* ===== Container ===== */
 .container {
-  max-width: 400px;
-  margin: 80px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,.1);
+  max-width: 420px;
+  width: 92%;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
-h2 {
+/* ===== Titles ===== */
+h1, h2 {
   text-align: center;
   color: #0d6efd;
+  margin-bottom: 18px;
 }
 
-input {
+/* ===== Inputs & Select ===== */
+input,
+select {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  border: 1px solid #d0d7e2;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s;
 }
 
+input:focus,
+select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.15);
+}
+
+/* ===== Buttons ===== */
 button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
+  margin-top: 10px;
   background: #0d6efd;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 6px;
-  font-size: 16px;
+  border-radius: 10px;
+  font-size: 17px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 button:hover {
   background: #084298;
 }
 
+/* ===== Secondary Button (Logout) ===== */
+.btn-secondary {
+  background: #6c757d;
+}
+
+.btn-secondary:hover {
+  background: #565e64;
+}
+
+/* ===== Messages ===== */
 .msg {
   text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.msg.success {
+  color: green;
+}
+
+.msg.error {
+  color: red;
+}
+
+/* ===== Small Text ===== */
+.small-text {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
   margin-top: 10px;
+}
+
+/* ===== Mobile Optimization ===== */
+@media (max-width: 480px) {
+  .container {
+    margin: 20px auto;
+    padding: 18px;
+  }
+
+  h1, h2 {
+    font-size: 20px;
+  }
 }
