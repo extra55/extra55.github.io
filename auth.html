@@ -18,6 +18,11 @@
 </div>
 
 <script>
+
+  if (localStorage.getItem("loggedIn")) {
+  window.location.replace("booking.html");
+}
+
 const API = "https://script.google.com/macros/s/AKfycbxL6b69WRgSaxmB1AmyDzHNNVz4DtjyOkVQJSsC3YZMGZiAkBFgR49gEyuRMFpA5b3X/exec";
 
 function sendOTP() {
@@ -60,6 +65,7 @@ function sendOTP() {
 
 </body>
 </html>
+
 
 
 
