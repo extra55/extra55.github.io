@@ -3,83 +3,143 @@
 <head>
   <meta charset="UTF-8">
   <title>حجز موعد</title>
-  <link rel="stylesheet" href="style.css">
-
-  <script>
-    if (localStorage.getItem("loggedIn") !== "true") {
-      window.location.href = "auth.html";
-    }
-  </script>
 </head>
 <body>
 
 <div class="container">
   <h2>حجز موعد طبي</h2>
 
+  <label>اختر الطبيب</label>
   <select id="doctor">
-    <option value="">اختر الطبيب</option>
+    <option value="">-- اختر الطبيب --</option>
     <option value="د. أحمد – باطنية">د. أحمد – باطنية</option>
     <option value="د. علي – أسنان">د. علي – أسنان</option>
     <option value="د. سارة – نسائية">د. سارة – نسائية</option>
   </select>
 
-  <input type="text" id="name" placeholder="اسم المريض">
+  <label>اسم المريض</label>
+  <input type="text" id="name" placeholder="اكتب اسمك الكامل">
+
+  <label>تاريخ / موعد الحجز</label>
   <input type="date" id="date">
 
   <button onclick="book()">تأكيد الحجز</button>
-  <button onclick="logout()" style="margin-top:10px;background:#6c757d;">تسجيل خروج</button>
 
   <p class="msg" id="msg"></p>
 </div>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  margin: 0;
+}
+
+.container {
+  max-width: 400px;
+  margin: 80px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,.1);
+}
+
+h2 {
+  text-align: center;
+  color: #0d6efd;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #084298;
+}
+
+.msg {
+  text-align: center;
+  margin-top: 10px;
+}
+</style>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbxL6b69WRgSaxmB1AmyDzHNNVz4DtjyOkVQJSsC3YZMGZiAkBFgR49gEyuRMFpA5b3X/exec";
 const phone = localStorage.getItem("phone");
 
-const dateInput = document.getElementById("date");
-dateInput.min = new Date().toISOString().split("T")[0];
+// حماية الصفحة
+if (!localStorage.getItem("loggedIn")) {
+  alert("يجب تسجيل الدخول أولاً");
+  window.location.href = "auth.html";
+}
+
+// منع اختيار تاريخ قديم
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("date").setAttribute("min", today);
 
 function book() {
   const doctor = document.getElementById("doctor").value;
-  const name = document.getElementById("name").value.trim();
-  const date = dateInput.value;
-  const msg = document.getElementById("msg");
+  const name   = document.getElementById("name").value;
+  const date   = document.getElementById("date").value;
+  const msg    = document.getElementById("msg");
+
+  msg.innerText = "";
 
   if (!doctor || !name || !date) {
-    msg.innerText = "❌ يرجى ملء جميع الحقول";
+    msg.innerText = "يرجى ملء جميع الحقول";
     return;
   }
 
-  const data = new URLSearchParams();
-  data.append("action", "booking");
-  data.append("doctor", doctor);
-  data.append("patient_name", name);
-  data.append("phone", phone);
-  data.append("date", date);
+  const formData = new FormData();
+  formData.append("action", "booking");
+  formData.append("doctor_id", doctor); // الآن اسم الطبيب
+  formData.append("patient_name", name);
+  formData.append("phone", phone);
+  formData.append("date", date);
 
   fetch(API, {
     method: "POST",
-    body: data
+    body: formData
   })
   .then(r => r.text())
-  .then(res => {
-    const [status, message] = res.split("|");
-    msg.innerText = message;
+  .then(t => {
+    console.log("RAW:", t);
+    const data = JSON.parse(t);
 
-    if (status === "success") {
+    msg.innerText = data.message;
+
+    if (data.status === "success") {
+      // مسح الحقول بعد النجاح
       document.getElementById("doctor").value = "";
       document.getElementById("name").value = "";
-      dateInput.value = "";
+      document.getElementById("date").value = "";
     }
   })
   .catch(() => {
     msg.innerText = "فشل الاتصال بالسيرفر";
   });
-}
-
-function logout() {
-  localStorage.clear();
-  window.location.href = "auth.html";
 }
 </script>
 
