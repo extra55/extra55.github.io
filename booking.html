@@ -88,7 +88,7 @@ button:hover { background: #084298; }
 </style>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlWAgLLunVWJdtwn08erokBU9Cr-QpL1kx8pnqejUdxbu3eQcz4Y74OF_2UVsI0OW_/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybbTIOW7O3bsiRI3DYwm1Ra_QQkh6GhuRL_NNUIuwP9G24z7E6q__Z8RPbfxaSYXlA/exec";
 fetch(SCRIPT_URL).then(r=>r.json()).then(d=>{
   if(d.maintenance==="ON") window.location.replace("maintenance.html");
 });
