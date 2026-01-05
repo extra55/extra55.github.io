@@ -120,9 +120,18 @@ if (savedCity) {
   updateDoctors();
 }
 
-// منع تاريخ قديم
-document.getElementById("date").min =
-  new Date().toISOString().split("T")[0];
+/* ===============================
+   🔒 تقييد الحجز لأسبوع واحد فقط
+================================ */
+const dateInput = document.getElementById("date");
+
+const today = new Date();
+const maxDate = new Date();
+maxDate.setDate(today.getDate() + 7);
+
+dateInput.min = today.toISOString().split("T")[0];
+dateInput.max = maxDate.toISOString().split("T")[0];
+/* =============================== */
 
 function updateDoctors() {
   const city   = document.getElementById("city").value;
@@ -165,7 +174,7 @@ function book() {
 
   const fd = new FormData();
   fd.append("action", "booking");
-  fd.append("city", city);          // ➜ العمود F
+  fd.append("city", city);
   fd.append("doctor_id", doctor);
   fd.append("patient_name", name);
   fd.append("phone", phone);
