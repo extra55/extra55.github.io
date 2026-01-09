@@ -87,6 +87,14 @@ button:hover { background: #084298; }
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz603fPvdZRmYVvALxalPimzHb9Vq2MPfA3UyWxkZEdLU5pZ_sY7jSCF2bt8pHOobU5/exec";
 
+  // منع الرجوع بعد تسجيل الخروج
+window.history.pushState(null, "", window.location.href);
+window.onpopstate = function () {
+  if (!localStorage.getItem("loggedIn")) {
+    window.location.replace("auth.html");
+  }
+};
+
 // فحص الصيانة
 fetch(SCRIPT_URL).then(r=>r.json()).then(d=>{
   if(d.maintenance==="ON") window.location.replace("maintenance.html");
