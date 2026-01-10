@@ -50,40 +50,39 @@
     }
   </style>
   
-    <!-- كود خاص بزر تسجيل الخروج -->
+  <!-- كود خاص بزر تسجيل الخروج -->
   <style>
-#logoutBtn {
-  background: #dc3545;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-}
-#logoutBtn:hover {
-  background: #bb2d3b;
-}
-</style>
+    #logoutBtn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #logoutBtn:hover {
+      background: #bb2d3b;
+    }
+  </style>
 
   <!-- كود خاص بزر الدعم -->
-<style>
-  .support-btn {
-  background: #25d366;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 15px;
-}
-
-.support-btn:hover {
-  background: #1ebe5d;
-}
-</style>
+  <style>
+    .support-btn {
+      background: #25d366;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+    }
+    .support-btn:hover {
+      background: #1ebe5d;
+    }
+  </style>
 </head>
 <body>
 
@@ -99,14 +98,17 @@
       MyClinic هو نظام ذكي لحجز مواعيد الأطباء،
       يساعدك تختار الطبيب المناسب وتحجز موعدك خلال دقائق.
     </p>
-    <a class="btn" href="auth.html">دخول</a> 
-    <button id="logoutBtn" onclick="confirmLogout()" style="display:none;">
-  تسجيل الخروج
-</button>
-    <button id="supportBtn" class="support-btn" onclick="openSupport()" style="display:none;">
-  💬 الدعم
-</button>
 
+    <a class="btn" href="auth.html">دخول</a> 
+
+    <button id="logoutBtn" onclick="confirmLogout()" style="display:none;">
+      تسجيل الخروج
+    </button>
+
+    <!-- زر الدعم (ظاهر دائماً) -->
+    <button id="supportBtn" class="support-btn" onclick="openSupport()">
+      💬 الدعم
+    </button>
   </div>
 
   <h2>⭐ مميزات التطبيق</h2>
@@ -122,19 +124,16 @@
   © 2025 MyClinic - جميع الحقوق محفوظة
 </footer>
 
-</body>
-  <!-- كود سكريبت خاص بإخفاء واضهار زر تسجيل الخروج -->
-  <script>
+<!-- كود سكريبت خاص بإخفاء وإظهار زر تسجيل الخروج -->
+<script>
 const logoutBtn = document.getElementById("logoutBtn");
 
-// إظهار / إخفاء الزر حسب حالة تسجيل الدخول
 if (localStorage.getItem("loggedIn")) {
   logoutBtn.style.display = "inline-block";
 } else {
   logoutBtn.style.display = "none";
 }
 
-// تسجيل الخروج
 function confirmLogout() {
   if (confirm("هل أنت متأكد من تسجيل الخروج؟")) {
     localStorage.clear();
@@ -143,23 +142,22 @@ function confirmLogout() {
 }
 </script>
 
-  <!-- كود سكريبت خاص بزر الدعم -->
+<!-- كود سكريبت خاص بزر الدعم -->
 <script>
-  function openSupport() {
-  const phone = "9647XXXXXXXX";
+function openSupport() {
   const msg = localStorage.getItem("loggedIn")
     ? "مرحباً، عندي مشكلة في حجز موعد"
     : "مرحباً، عندي استفسار قبل التسجيل";
 
   window.open(
-    `https://wa.me/${9647803342472}?text=${encodeURIComponent(msg)}`,
+    "https://wa.me/9647803342472?text=" + encodeURIComponent(msg),
     "_blank"
   );
 }
 </script>
 
-  <!-- كود سكريبت خاص بصفحة الصيانة -->
-  <script>
+<!-- كود سكريبت خاص بصفحة الصيانة -->
+<script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz603fPvdZRmYVvALxalPimzHb9Vq2MPfA3UyWxkZEdLU5pZ_sY7jSCF2bt8pHOobU5/exec";
 
 fetch(SCRIPT_URL)
@@ -173,9 +171,6 @@ fetch(SCRIPT_URL)
     console.error("Maintenance check failed", err);
   });
 </script>
+
+</body>
 </html>
-
-
-
-
-
