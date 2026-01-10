@@ -82,7 +82,50 @@
     .support-btn:hover {
       background: #1ebe5d;
     }
-  </style>
+   </style>
+  
+<!-- كود خاص بألاسئلة الشائعة -->
+   <style>
+    .faq {
+  margin-top: 20px;
+}
+
+.faq-item {
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: right;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.faq-question span {
+  font-size: 20px;
+  transition: transform 0.3s;
+}
+
+.faq-answer {
+  display: none;
+  padding: 15px;
+  font-size: 15px;
+  color: #555;
+  border-top: 1px solid #eee;
+}
+   </style>
+  
 </head>
 <body>
 
@@ -119,6 +162,54 @@
     <div class="card">🔔 إشعارات وتنبيهات</div>
   </div>
 </section>
+
+  <!-- كود خاص بألاسئلة الشائعة -->
+  <h2 style="margin-top:30px;">❓ الأسئلة الشائعة</h2>
+
+<div class="faq">
+
+  <div class="faq-item">
+    <button class="faq-question">
+      كيف يمكنني حجز موعد؟
+      <span>+</span>
+    </button>
+    <div class="faq-answer">
+      اختر المحافظة، ثم الطبيب، ثم التاريخ المناسب واضغط على تأكيد الحجز.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">
+      هل الحجز مجاني؟
+      <span>+</span>
+    </button>
+    <div class="faq-answer">
+      نعم، الحجز عبر تطبيق MyClinic مجاني بالكامل.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">
+      هل يمكنني إلغاء أو تغيير الموعد؟
+      <span>+</span>
+    </button>
+    <div class="faq-answer">
+      حالياً لا، لكن سيتم إضافة هذه الميزة قريباً.
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question">
+      ماذا أفعل إذا واجهت مشكلة؟
+      <span>+</span>
+    </button>
+    <div class="faq-answer">
+      يمكنك التواصل مع الدعم من خلال زر الدعم في الصفحة الرئيسية.
+    </div>
+  </div>
+
+</div>
+
 
 <footer>
   © 2025 MyClinic - جميع الحقوق محفوظة
@@ -171,6 +262,25 @@ fetch(SCRIPT_URL)
     console.error("Maintenance check failed", err);
   });
 </script>
+<!-- كود سكريبت خاص بألاسئلة الشائعة -->
+  <script>
+document.querySelectorAll(".faq-question").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector("span");
 
+    const isOpen = answer.style.display === "block";
+
+    document.querySelectorAll(".faq-answer").forEach(a => a.style.display = "none");
+    document.querySelectorAll(".faq-question span").forEach(s => s.textContent = "+");
+
+    if (!isOpen) {
+      answer.style.display = "block";
+      icon.textContent = "−";
+    }
+  });
+});
+</script>
 </body>
 </html>
+
