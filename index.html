@@ -50,7 +50,7 @@
     }
   </style>
   
-    <!-- كود سكريبت خاص بزر تسجيل الخروج -->
+    <!-- كود خاص بزر تسجيل الخروج -->
   <style>
 #logoutBtn {
   background: #dc3545;
@@ -66,6 +66,24 @@
 }
 </style>
 
+  <!-- كود خاص بزر الدعم -->
+<style>
+  .support-btn {
+  background: #25d366;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.support-btn:hover {
+  background: #1ebe5d;
+}
+</style>
 </head>
 <body>
 
@@ -84,6 +102,9 @@
     <a class="btn" href="auth.html">دخول</a> 
     <button id="logoutBtn" onclick="confirmLogout()" style="display:none;">
   تسجيل الخروج
+</button>
+    <button id="supportBtn" class="support-btn" onclick="openSupport()" style="display:none;">
+  💬 الدعم
 </button>
 
   </div>
@@ -122,6 +143,21 @@ function confirmLogout() {
 }
 </script>
 
+  <!-- كود سكريبت خاص بزر الدعم -->
+<script>
+  function openSupport() {
+  const phone = "9647XXXXXXXX";
+  const msg = localStorage.getItem("loggedIn")
+    ? "مرحباً، عندي مشكلة في حجز موعد"
+    : "مرحباً، عندي استفسار قبل التسجيل";
+
+  window.open(
+    `https://wa.me/${9647803342472}?text=${encodeURIComponent(msg)}`,
+    "_blank"
+  );
+}
+</script>
+
   <!-- كود سكريبت خاص بصفحة الصيانة -->
   <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz603fPvdZRmYVvALxalPimzHb9Vq2MPfA3UyWxkZEdLU5pZ_sY7jSCF2bt8pHOobU5/exec";
@@ -138,6 +174,7 @@ fetch(SCRIPT_URL)
   });
 </script>
 </html>
+
 
 
 
