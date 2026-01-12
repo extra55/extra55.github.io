@@ -1,246 +1,121 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>حجز موعد</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>حجز موعد</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
 <div class="container">
-  <h2>حجز موعد طبي</h2>
+<h2>حجز موعد طبي</h2>
 
-  <!-- المحافظة -->
-  <label>اختر المحافظة</label>
-  <select id="city" onchange="updateDoctors()">
-    <option value="">-- اختر المحافظة --</option>
-    <option value="بغداد">بغداد</option>
-    <option value="ذي قار">ذي قار</option>
-  </select>
+<label>اختر المحافظة</label>
+<select id="city" onchange="updateDoctors()">
+<option value="">-- اختر المحافظة --</option>
+<option value="بغداد">بغداد</option>
+<option value="ذي قار">ذي قار</option>
+</select>
 
-  <!-- اسم المريض -->
-  <label>اسم المريض</label>
-  <input type="text" id="name" placeholder="اكتب اسمك الكامل">
+<label>اسم المريض</label>
+<input type="text" id="name">
 
-  <!-- الاختصاص -->
-  <label>اختر الاختصاص</label>
-  <select id="specialty" onchange="filterDoctors()">
-    <option value="">-- اختر الاختصاص --</option>
-  </select>
+<label>اختر الاختصاص</label>
+<select id="specialty" onchange="filterDoctors()">
+<option value="">-- اختر الاختصاص --</option>
+</select>
 
-  <!-- الطبيب -->
-  <label>اختر الطبيب</label>
-  <select id="doctor" onchange="showAddress()">
-    <option value="">-- اختر الطبيب --</option>
-  </select>
+<label>اختر الطبيب</label>
+<select id="doctor" onchange="showAddress()">
+<option value="">-- اختر الطبيب --</option>
+</select>
 
-  <!-- عنوان الطبيب -->
-  <div id="addressBox" class="address-box" style="display:none;"></div>
+<div id="addressBox" class="address-box" style="display:none;"></div>
 
-  <!-- التاريخ -->
-  <label>تاريخ / موعد الحجز</label>
-  <input type="date" id="date">
+<label>تاريخ الحجز</label>
+<input type="date" id="date">
 
-  <button onclick="book()">تأكيد الحجز</button>
-  <button class="home-btn" onclick="goHome()">🏠 الرئيسية</button>
+<button onclick="book()">تأكيد الحجز</button>
+<button class="home-btn" onclick="goHome()">🏠 الرئيسية</button>
 
-  <p class="msg" id="msg"></p>
+<p id="msg"></p>
 </div>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
-  margin: 0;
-}
-.container {
-  max-width: 400px;
-  margin: 80px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0,0,0,.1);
-}
-h2 { text-align: center; color: #0d6efd; }
-label { display: block; margin-top: 10px; font-weight: bold; }
-input, select {
-  width: 100%;
-  padding: 12px;
-  margin-top: 5px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background: #0d6efd;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-}
-button:hover { background: #084298; }
-.home-btn {
-  background: #6c757d;
-}
-.home-btn:hover {
-  background: #5a6268;
-}
-.msg { text-align: center; margin-top: 10px; }
-
-.address-box {
-  margin-top: 8px;
-  padding: 10px;
-  background: #f1f3f5;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #333;
-}
-</style>
-
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_U_dwY2FRi4EPVf-iszDE3rQVj0oqHJqdmbdWWjjxPRA1U2QxXqX9DkVUIYmPBorG/exec";
-const API = SCRIPT_URL;
-const phone = localStorage.getItem("phone");
+const API = "ضع_رابط_السكريبت_هنا";
 let allDoctors = [];
 
-/* ===== فحص الصيانة ===== */
-fetch(SCRIPT_URL)
-  .then(r => r.json())
-  .then(d => {
-    if (d.maintenance === "ON") {
-      window.location.replace("maintenance.html");
-    }
-  });
-
-/* ===== حماية الصفحة ===== */
-if (!localStorage.getItem("loggedIn")) {
-  window.location.replace("auth.html");
+// تثبيت المحافظة
+const savedCity = localStorage.getItem("city");
+if (savedCity) {
+  city.value = savedCity;
+  updateDoctors();
 }
 
-/* ===== تقييد الحجز لأسبوع ===== */
-const dateInput = document.getElementById("date");
-const today = new Date();
-const maxDate = new Date();
-maxDate.setDate(today.getDate() + 7);
-dateInput.min = today.toISOString().split("T")[0];
-dateInput.max = maxDate.toISOString().split("T")[0];
-
-/* ===== جلب الأطباء حسب المحافظة ===== */
 function updateDoctors() {
-  const city = document.getElementById("city").value;
-  const specialty = document.getElementById("specialty");
-  const doctor = document.getElementById("doctor");
-  const addressBox = document.getElementById("addressBox");
+  const cityVal = city.value;
+  localStorage.setItem("city", cityVal);
 
   specialty.innerHTML = '<option value="">-- اختر الاختصاص --</option>';
   doctor.innerHTML = '<option value="">-- اختر الطبيب --</option>';
   addressBox.style.display = "none";
 
-  if (!city) return;
-
-  localStorage.setItem("city", city);
+  if (!cityVal) return;
 
   const fd = new FormData();
-  fd.append("action", "get_doctors");
-  fd.append("city", city);
+  fd.append("action","get_doctors");
+  fd.append("city",cityVal);
 
-  fetch(API, { method: "POST", body: fd })
-    .then(r => r.json())
-    .then(d => {
-      if (d.status !== "success") return;
-
-      allDoctors = d.doctors;
-
-      [...new Set(allDoctors.map(x => x.specialty))].forEach(s => {
-        const opt = document.createElement("option");
-        opt.value = s;
-        opt.textContent = s;
-        specialty.appendChild(opt);
-      });
+  fetch(API,{method:"POST",body:fd})
+  .then(r=>r.json())
+  .then(d=>{
+    allDoctors = d.doctors;
+    [...new Set(allDoctors.map(x=>x.specialty))].forEach(s=>{
+      specialty.innerHTML += `<option>${s}</option>`;
     });
+  });
 }
 
-/* ===== فلترة الأطباء حسب الاختصاص ===== */
-function filterDoctors() {
-  const specialtyVal = document.getElementById("specialty").value;
-  const doctor = document.getElementById("doctor");
-
-  doctor.innerHTML = '<option value="">-- اختر الطبيب --</option>';
-
-  allDoctors
-    .filter(d => d.specialty === specialtyVal)
-    .forEach(d => {
-      const opt = document.createElement("option");
-      opt.value = d.name;
-      opt.textContent = d.name;
-      opt.dataset.address = d.address || "";
-      doctor.appendChild(opt);
-    });
+function filterDoctors(){
+  doctor.innerHTML='<option value="">-- اختر الطبيب --</option>';
+  allDoctors.filter(d=>d.specialty===specialty.value)
+  .forEach(d=>{
+    const o=document.createElement("option");
+    o.value=d.name;
+    o.textContent=d.name;
+    o.dataset.address=d.address;
+    doctor.appendChild(o);
+  });
 }
 
-/* ===== عرض عنوان الطبيب ===== */
-function showAddress() {
-  const doctor = document.getElementById("doctor");
-  const addressBox = document.getElementById("addressBox");
-  const selected = doctor.options[doctor.selectedIndex];
-
-  if (selected && selected.dataset.address) {
-    addressBox.innerText = "📍 العنوان: " + selected.dataset.address;
-    addressBox.style.display = "block";
-  } else {
-    addressBox.style.display = "none";
-  }
+function showAddress(){
+  const o=doctor.options[doctor.selectedIndex];
+  if(o?.dataset.address){
+    addressBox.innerText="📍 "+o.dataset.address;
+    addressBox.style.display="block";
+  } else addressBox.style.display="none";
 }
 
-/* ===== إرسال الحجز ===== */
-function book() {
-  const city = document.getElementById("city").value;
-  const doctor = document.getElementById("doctor").value;
-  const name = document.getElementById("name").value;
-  const date = document.getElementById("date").value;
-  const msg = document.getElementById("msg");
-
-  msg.innerText = "";
-
-  if (!city || !doctor || !name || !date) {
-    msg.innerText = "يرجى ملء جميع الحقول";
-    return;
+function book(){
+  if(!city.value||!doctor.value||!name.value||!date.value){
+    msg.innerText="يرجى ملء جميع الحقول";return;
   }
 
-  const fd = new FormData();
-  fd.append("action", "booking");
-  fd.append("city", city);
-  fd.append("doctor_id", doctor);
-  fd.append("patient_name", name);
-  fd.append("phone", phone);
-  fd.append("date", date);
+  const fd=new FormData();
+  fd.append("action","booking");
+  fd.append("city",city.value);
+  fd.append("doctor_id",doctor.value);
+  fd.append("patient_name",name.value);
+  fd.append("phone",localStorage.getItem("phone"));
+  fd.append("date",date.value);
 
-  fetch(API, { method: "POST", body: fd })
-    .then(r => r.json())
-    .then(d => {
-      msg.innerText = d.message;
-      if (d.status === "success") {
-        document.getElementById("name").value = "";
-        document.getElementById("doctor").value = "";
-        document.getElementById("specialty").value = "";
-        document.getElementById("date").value = "";
-        document.getElementById("addressBox").style.display = "none";
-      }
-    })
-    .catch(() => msg.innerText = "فشل الاتصال بالسيرفر");
+  fetch(API,{method:"POST",body:fd})
+  .then(r=>r.json())
+  .then(d=>msg.innerText=d.message);
 }
 
-/* ===== زر الرئيسية ===== */
-function goHome() {
-  window.location.href = "index.html";
-}
+function goHome(){location.href="index.html";}
 </script>
-
-<!-- ربط ملف الحماية -->
-<script src="auth-guard.js"></script>
 
 </body>
 </html>
