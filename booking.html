@@ -1,46 +1,53 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>حجز موعد</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>حجز موعد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
 <div class="container">
-<h2>حجز موعد طبي</h2>
+  <h2>حجز موعد طبي</h2>
 
-<label>اختر المحافظة</label>
-<select id="city" onchange="updateDoctors()">
-<option value="">-- اختر المحافظة --</option>
-<option value="بغداد">بغداد</option>
-<option value="ذي قار">ذي قار</option>
-</select>
+  <!-- المحافظة -->
+  <label>اختر المحافظة</label>
+  <select id="city" onchange="updateDoctors()">
+    <option value="">-- اختر المحافظة --</option>
+    <option value="بغداد">بغداد</option>
+    <option value="ذي قار">ذي قار</option>
+  </select>
 
-<label>اسم المريض</label>
-<input type="text" id="name">
+  <!-- اسم المريض -->
+  <label>اسم المريض</label>
+  <input type="text" id="name" placeholder="اكتب اسمك الكامل">
 
-<label>اختر الاختصاص</label>
-<select id="specialty" onchange="filterDoctors()">
-<option value="">-- اختر الاختصاص --</option>
-</select>
+  <!-- الاختصاص -->
+  <label>اختر الاختصاص</label>
+  <select id="specialty" onchange="filterDoctors()">
+    <option value="">-- اختر الاختصاص --</option>
+  </select>
 
-<label>اختر الطبيب</label>
-<select id="doctor" onchange="showAddress()">
-<option value="">-- اختر الطبيب --</option>
-</select>
+  <!-- الطبيب -->
+  <label>اختر الطبيب</label>
+  <select id="doctor" onchange="showAddress()">
+    <option value="">-- اختر الطبيب --</option>
+  </select>
 
-<div id="addressBox" class="address-box" style="display:none;"></div>
+  <!-- عنوان الطبيب -->
+  <div id="addressBox" class="address-box" style="display:none;"></div>
 
-<label>تاريخ الحجز</label>
-<input type="date" id="date">
+  <!-- التاريخ -->
+  <label>تاريخ / موعد الحجز</label>
+  <input type="date" id="date">
 
-<button onclick="book()">تأكيد الحجز</button>
-<button class="home-btn" onclick="goHome()">🏠 الرئيسية</button>
+  <button onclick="book()">تأكيد الحجز</button>
+  <button class="home-btn" onclick="goHome()">🏠 الرئيسية</button>
 
-<p id="msg"></p>
+  <p class="msg" id="msg"></p>
 </div>
-  <style>
+
+<style>
 body {
   font-family: Arial, sans-serif;
   background: #f4f6f9;
@@ -94,80 +101,146 @@ button:hover { background: #084298; }
 </style>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbz_U_dwY2FRi4EPVf-iszDE3rQVj0oqHJqdmbdWWjjxPRA1U2QxXqX9DkVUIYmPBorG/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_U_dwY2FRi4EPVf-iszDE3rQVj0oqHJqdmbdWWjjxPRA1U2QxXqX9DkVUIYmPBorG/exec";
+const API = SCRIPT_URL;
+const phone = localStorage.getItem("phone");
 let allDoctors = [];
 
-// تثبيت المحافظة
-const savedCity = localStorage.getItem("city");
-if (savedCity) {
-  city.value = savedCity;
-  updateDoctors();
+/* ===== فحص الصيانة ===== */
+fetch(SCRIPT_URL)
+  .then(r => r.json())
+  .then(d => {
+    if (d.maintenance === "ON") {
+      window.location.replace("maintenance.html");
+    }
+  });
+
+/* ===== حماية الصفحة ===== */
+if (!localStorage.getItem("loggedIn")) {
+  window.location.replace("auth.html");
 }
 
+/* ===== تقييد الحجز لأسبوع ===== */
+const dateInput = document.getElementById("date");
+const today = new Date();
+const maxDate = new Date();
+maxDate.setDate(today.getDate() + 7);
+dateInput.min = today.toISOString().split("T")[0];
+dateInput.max = maxDate.toISOString().split("T")[0];
+
+/* ===== جلب الأطباء حسب المحافظة ===== */
 function updateDoctors() {
-  const cityVal = city.value;
-  localStorage.setItem("city", cityVal);
+  const city = document.getElementById("city").value;
+  const specialty = document.getElementById("specialty");
+  const doctor = document.getElementById("doctor");
+  const addressBox = document.getElementById("addressBox");
 
   specialty.innerHTML = '<option value="">-- اختر الاختصاص --</option>';
   doctor.innerHTML = '<option value="">-- اختر الطبيب --</option>';
   addressBox.style.display = "none";
 
-  if (!cityVal) return;
+  if (!city) return;
+
+  localStorage.setItem("city", city);
 
   const fd = new FormData();
-  fd.append("action","get_doctors");
-  fd.append("city",cityVal);
+  fd.append("action", "get_doctors");
+  fd.append("city", city);
 
-  fetch(API,{method:"POST",body:fd})
-  .then(r=>r.json())
-  .then(d=>{
-    allDoctors = d.doctors;
-    [...new Set(allDoctors.map(x=>x.specialty))].forEach(s=>{
-      specialty.innerHTML += `<option>${s}</option>`;
+  fetch(API, { method: "POST", body: fd })
+    .then(r => r.json())
+    .then(d => {
+      if (d.status !== "success") return;
+
+      allDoctors = d.doctors;
+
+      [...new Set(allDoctors.map(x => x.specialty))].forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s;
+        opt.textContent = s;
+        specialty.appendChild(opt);
+      });
     });
-  });
 }
 
-function filterDoctors(){
-  doctor.innerHTML='<option value="">-- اختر الطبيب --</option>';
-  allDoctors.filter(d=>d.specialty===specialty.value)
-  .forEach(d=>{
-    const o=document.createElement("option");
-    o.value=d.name;
-    o.textContent=d.name;
-    o.dataset.address=d.address;
-    doctor.appendChild(o);
-  });
+/* ===== فلترة الأطباء حسب الاختصاص ===== */
+function filterDoctors() {
+  const specialtyVal = document.getElementById("specialty").value;
+  const doctor = document.getElementById("doctor");
+
+  doctor.innerHTML = '<option value="">-- اختر الطبيب --</option>';
+
+  allDoctors
+    .filter(d => d.specialty === specialtyVal)
+    .forEach(d => {
+      const opt = document.createElement("option");
+      opt.value = d.name;
+      opt.textContent = d.name;
+      opt.dataset.address = d.address || "";
+      doctor.appendChild(opt);
+    });
 }
 
-function showAddress(){
-  const o=doctor.options[doctor.selectedIndex];
-  if(o?.dataset.address){
-    addressBox.innerText="📍 "+o.dataset.address;
-    addressBox.style.display="block";
-  } else addressBox.style.display="none";
+/* ===== عرض عنوان الطبيب ===== */
+function showAddress() {
+  const doctor = document.getElementById("doctor");
+  const addressBox = document.getElementById("addressBox");
+  const selected = doctor.options[doctor.selectedIndex];
+
+  if (selected && selected.dataset.address) {
+    addressBox.innerText = "📍 العنوان: " + selected.dataset.address;
+    addressBox.style.display = "block";
+  } else {
+    addressBox.style.display = "none";
+  }
 }
 
-function book(){
-  if(!city.value||!doctor.value||!name.value||!date.value){
-    msg.innerText="يرجى ملء جميع الحقول";return;
+/* ===== إرسال الحجز ===== */
+function book() {
+  const city = document.getElementById("city").value;
+  const doctor = document.getElementById("doctor").value;
+  const name = document.getElementById("name").value;
+  const date = document.getElementById("date").value;
+  const msg = document.getElementById("msg");
+
+  msg.innerText = "";
+
+  if (!city || !doctor || !name || !date) {
+    msg.innerText = "يرجى ملء جميع الحقول";
+    return;
   }
 
-  const fd=new FormData();
-  fd.append("action","booking");
-  fd.append("city",city.value);
-  fd.append("doctor_id",doctor.value);
-  fd.append("patient_name",name.value);
-  fd.append("phone",localStorage.getItem("phone"));
-  fd.append("date",date.value);
+  const fd = new FormData();
+  fd.append("action", "booking");
+  fd.append("city", city);
+  fd.append("doctor_id", doctor);
+  fd.append("patient_name", name);
+  fd.append("phone", phone);
+  fd.append("date", date);
 
-  fetch(API,{method:"POST",body:fd})
-  .then(r=>r.json())
-  .then(d=>msg.innerText=d.message);
+  fetch(API, { method: "POST", body: fd })
+    .then(r => r.json())
+    .then(d => {
+      msg.innerText = d.message;
+      if (d.status === "success") {
+        document.getElementById("name").value = "";
+        document.getElementById("doctor").value = "";
+        document.getElementById("specialty").value = "";
+        document.getElementById("date").value = "";
+        document.getElementById("addressBox").style.display = "none";
+      }
+    })
+    .catch(() => msg.innerText = "فشل الاتصال بالسيرفر");
 }
 
-function goHome(){location.href="index.html";}
+/* ===== زر الرئيسية ===== */
+function goHome() {
+  window.location.href = "index.html";
+}
 </script>
+
+<!-- ربط ملف الحماية -->
+<script src="auth-guard.js"></script>
 
 </body>
 </html>
