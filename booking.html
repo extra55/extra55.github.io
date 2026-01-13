@@ -128,27 +128,6 @@ if (!localStorage.getItem("loggedIn")) {
   window.location.replace("auth.html");
 }
 
-  /* ===== حضر المتطفلين يوضع بعد كود الحماية مباشرتاً ===== */
-  // 🔐 فحص الحظر
-const phone = localStorage.getItem("phone");
-
-if (phone) {
-  const fd = new FormData();
-  fd.append("action", "check_ban");
-  fd.append("phone", phone);
-
-  fetch(API, { method: "POST", body: fd })
-    .then(r => r.json())
-    .then(d => {
-      if (d.banned) {
-        // تسجيل خروج إجباري
-        localStorage.clear();
-        alert("تم حظرك من استخدام الموقع");
-        window.location.replace("auth.html");
-      }
-    });
-}
-
 /* ===== تقييد الحجز لأسبوع ===== */
 const dateInput = document.getElementById("date");
 const today = new Date();
@@ -271,5 +250,27 @@ function goHome() {
 <!-- ربط ملف الحماية -->
 <script src="auth-guard.js"></script>
 
+  /* ===== حضر المتطفلين يوضع بعد كود الحماية مباشرتاً ===== */
+  <script>
+// 🔐 فحص الحظر
+const phone = localStorage.getItem("phone");
+
+if (phone) {
+  const fd = new FormData();
+  fd.append("action", "check_ban");
+  fd.append("phone", phone);
+
+  fetch(API, { method: "POST", body: fd })
+    .then(r => r.json())
+    .then(d => {
+      if (d.banned) {
+        // تسجيل خروج إجباري
+        localStorage.clear();
+        alert("تم حظرك من استخدام الموقع");
+        window.location.replace("auth.html");
+      }
+    });
+}
+</script>
 </body>
 </html>
