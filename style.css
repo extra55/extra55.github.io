@@ -76,6 +76,15 @@ button:hover {
   background: #565e64;
 }
 
+/* ===== home button ===== */
+button:hover { background: #084298; }
+.home-btn {
+  background: #6c757d;
+}
+.home-btn:hover {
+  background: #5a6268;
+}
+
 /* ===== Messages ===== */
 .msg {
   text-align: center;
@@ -110,3 +119,4 @@ button:hover {
     font-size: 20px;
   }
 }
+
