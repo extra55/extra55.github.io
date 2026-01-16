@@ -279,7 +279,7 @@
 <!-- كود سكريبت خاص بزر الدعم -->
 <script>
 function openSupport() {
-  const msg = localStorage.getItem("loggedIn")
+  const msg = localStorage.getItem("logged_in") === "yes"
     ? "مرحباً، عندي مشكلة في حجز موعد"
     : "مرحباً، عندي استفسار قبل التسجيل";
 
@@ -328,13 +328,12 @@ document.querySelectorAll(".faq-question").forEach(btn => {
 
   <!-- كود سكريبت خاص بالقائمة الجانبية -->
   <script>
-/* ===== القائمة الجانبية (Menu) ===== */
+/* ===== القائمة الجانبية ===== */
 
 const menuBtn = document.getElementById("menuBtn");
 const sideMenu = document.getElementById("sideMenu");
 const menuOverlay = document.getElementById("menuOverlay");
 
-/* فتح / إغلاق القائمة */
 function toggleMenu() {
   sideMenu.classList.toggle("open");
   menuOverlay.style.display = sideMenu.classList.contains("open")
@@ -342,12 +341,10 @@ function toggleMenu() {
     : "none";
 }
 
-/* الانتقال إلى الحساب */
 function goAccount() {
   window.location.href = "account.html";
 }
 
-/* تسجيل الخروج */
 function logout() {
   if (!confirm("هل أنت متأكد من تسجيل الخروج؟")) return;
 
@@ -356,30 +353,12 @@ function logout() {
 
   sideMenu.classList.remove("open");
   menuOverlay.style.display = "none";
-  menuBtn.style.display = "none";
+  menuBtn.style.display = "
 
-  location.reload();
-}
 
-/* إظهار زر ☰ فقط عند تسجيل الدخول */
-document.addEventListener("DOMContentLoaded", function () {
-  if (localStorage.getItem("logged_in") === "yes") {
-    menuBtn.style.display = "block";
-  } else {
-    menuBtn.style.display = "none";
-  }
-});
+  <!-- كود سكريبت مؤقت نحذفه عندما نربط الصفحة بصفحة تسجيل الدخول -->
+<script>
+localStorage.setItem("logged_in", "yes");
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
