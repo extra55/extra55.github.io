@@ -30,8 +30,8 @@ fetch(SCRIPT_URL)
   });
 </script>
 <script>
-  if (localStorage.getItem("loggedIn")) {
-  window.location.replace("booking.html");
+if (!localStorage.getItem("phone")) {
+  window.location.href = "auth.html";
 }
 
 const API = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
@@ -76,6 +76,7 @@ function sendOTP() {
 
 </body>
 </html>
+
 
 
 
