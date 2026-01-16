@@ -30,7 +30,7 @@ fetch(SCRIPT_URL)
   });
 </script>
 <script>
-  if (localStorage.getItem("loggedIn")) {
+  localStorage.setItem("logged_in", "yes");
   window.location.replace("booking.html");
 }
 
@@ -76,4 +76,5 @@ function sendOTP() {
 
 </body>
 </html>
+
 
