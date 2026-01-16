@@ -74,9 +74,11 @@ function sendOTP() {
 }
 </script>
 
+  <script>
+/* منع دخول صفحة تسجيل الدخول إذا المستخدم مسجل */
+if (localStorage.getItem("phone")) {
+  window.location.replace("index.html");
+}
+</script>
 </body>
 </html>
-
-
-
-
