@@ -14,6 +14,14 @@
   <button onclick="sendOTP()">إرسال الرمز</button>
   <p class="msg" id="msg"></p>
 </div>
+
+  <script>
+/* إذا المستخدم مسجل مسبقاً لا يدخل auth */
+if (localStorage.getItem("phone")) {
+  window.location.replace("index.html");
+}
+</script>
+
    <!-- كود سكريبت صفحة الصيانة -->
   <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
@@ -29,10 +37,8 @@ fetch(SCRIPT_URL)
     console.error("Maintenance check failed", err);
   });
 </script>
+  
 <script>
-if (!localStorage.getItem("phone")) {
-  window.location.href = "auth.html";
-}
 
 const API = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
 
@@ -73,12 +79,7 @@ function sendOTP() {
   });
 }
 </script>
-
-  <script>
-/* منع دخول صفحة تسجيل الدخول إذا المستخدم مسجل */
-if (localStorage.getItem("phone")) {
-  window.location.replace("index.html");
-}
 </script>
 </body>
 </html>
+
