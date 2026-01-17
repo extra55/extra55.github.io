@@ -2,17 +2,9 @@
 // 🔐 Auth Guard - حماية الصفحات
 // ===============================
 
-// منع الدخول إذا غير مسجل
-if (!localStorage.getItem("loggedIn")) {
+if (!localStorage.getItem("phone")) {
   window.location.replace("auth.html");
 }
 
-// منع الرجوع بالـ Back بعد تسجيل الخروج
-window.history.pushState(null, "", window.location.href);
-window.onpopstate = function () {
-  if (!localStorage.getItem("loggedIn")) {
-    window.location.replace("auth.html");
-  }
-};
 <!-- (تربط هذه الصفحة مع الصفحات المحمية (التي تفتح بعد تسجيل الدخول -->
 <!-- تربط بالصفحات المراد حمايتها عن طريق وضع سطر السكريبت الخاص بالربط فوق نهاية البودي مباشرتاً -->
