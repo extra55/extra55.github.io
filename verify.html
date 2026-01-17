@@ -30,9 +30,8 @@ fetch(SCRIPT_URL)
 </script>
  <!-- كود سكريبت الرئيسي للصفحة -->
 <script>
-if (localStorage.getItem("loggedIn")) {
-  window.location.replace("booking.html");
-}
+localStorage.setItem("phone", phone);
+window.location.href = "index.html";
   
 const API = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
 const phone = localStorage.getItem("phone");
