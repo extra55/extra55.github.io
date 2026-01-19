@@ -50,6 +50,42 @@
     }
   </style>
 
+  <!-- زر تسجيل الدخول وزر حجز الطبيب -->
+  <style>
+    .main-actions {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.main-actions button {
+  padding: 14px 28px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px;
+  transition: 0.3s;
+}
+
+#btnLogin {
+  background: #0d6efd;
+  color: white;
+}
+
+#btnLogin:hover {
+  background: #084298;
+}
+
+#btnBooking {
+  background: #198754;
+  color: white;
+}
+
+#btnBooking:hover {
+  background: #146c43;
+}
+  </style>
+
   <!-- كود خاص بزر الدعم -->
   <style>
     .support-btn {
@@ -204,11 +240,11 @@
       يساعدك تختار الطبيب المناسب وتحجز موعدك خلال دقائق.
     </p>
 
-    <a class="btn" href="auth.html">دخول</a> 
-
-    <button id="logoutBtn" onclick="confirmLogout()" style="display:none;">
-      تسجيل الخروج
-    </button>
+    <!-- زر تسجيل الدخول وزر الحجز -->
+    <div class="main-actions">
+  <button id="btnLogin" onclick="goLogin()">تسجيل الدخول</button>
+  <button id="btnBooking" onclick="goBooking()">احجز طبيبك الآن</button>
+</div>
 
     <!-- زر الدعم (ظاهر دائماً) -->
     <button id="supportBtn" class="support-btn" onclick="openSupport()">
@@ -280,7 +316,7 @@
 <!-- كود سكريبت خاص بزر الدعم -->
 <script>
 function openSupport() {
-  const msg = localStorage.getItem("logged_in") === "yes"
+  const msg = localStorage.getItem("phone")
     ? "مرحباً، عندي مشكلة في حجز موعد"
     : "مرحباً، عندي استفسار قبل التسجيل";
 
@@ -373,7 +409,33 @@ window.addEventListener("DOMContentLoaded", function () {
   }
 });
 </script>
+
+  <!-- كود سكريبت خاص بزر تسجيل الدخول وزر حجز الطبيب -->
+ <script>
+function goLogin() {
+  window.location.href = "auth.html";
+}
+
+function goBooking() {
+  window.location.href = "booking.html";
+}
+
+window.addEventListener("load", () => {
+  const btnLogin = document.getElementById("btnLogin");
+  const btnBooking = document.getElementById("btnBooking");
+
+  const phone = localStorage.getItem("phone");
+
+  if (phone) {
+    // مسجل دخول
+    btnLogin.style.display = "none";
+    btnBooking.style.display = "inline-block";
+  } else {
+    // غير مسجل
+    btnLogin.style.display = "inline-block";
+    btnBooking.style.display = "none";
+  }
+});
+</script>
 </body>
 </html>
-
-
