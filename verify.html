@@ -18,15 +18,6 @@
 </div>
 
   <script>
-/* ==================  ================== */
-const pendingPhone = localStorage.getItem("pending_phone");
-
-if (!pendingPhone) {
-  window.location.replace("auth.html");
-}
-</script>
-
-<script>
 /* ================== الإعدادات ================== */
 const API = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
 
@@ -40,54 +31,25 @@ fetch(API)
   })
   .catch(() => {});
 
-/* ================== حماية الصفحة ================== */
-const phone = localStorage.getItem("phone");
+/* ================== حماية verify.html ================== */
 
-/* إذا لا يوجد رقم هاتف → طرده */
-if (!phone) {
-  alert("يجب إدخال رقم الهاتف أولاً");
+/* الرقم المؤقت فقط */
+const pendingPhone = localStorage.getItem("pending_phone");
+
+/* إذا ماكو رقم مؤقت → طرده */
+if (!pendingPhone) {
   window.location.replace("auth.html");
 }
 
-/* إذا كان متحقق مسبقاً → لا يعيد التحقق */
+/* إذا كان متحقق مسبقاً → لا يسمح بالرجوع */
 if (localStorage.getItem("auth_verified") === "yes") {
-  window.location.replace("booking.html");
+  window.location.replace("index.html");
 }
 
 /* ================== التحقق من الرمز ================== */
 function verifyOTP() {
   const otp = document.getElementById("otp").value.trim();
-  const msg = document.getElementById("msg");
-
-  msg.innerText = "";
-
-  if (!/^\d{6}$/.test(otp)) {
-    msg.innerText = "رمز التحقق يجب أن يكون 6 أرقام";
-    return;
-  }
-
-  const fd = new FormData();
-  fd.append("action", "verify_otp");
-  fd.append("phone", phone);
-  fd.append("otp", otp);
-
-  fetch(API, { method: "POST", body: fd })
-    .then(r => r.json())
-    .then(d => {
-      msg.innerText = d.message;
-
-      if (d.status === "success") {
-        /* ✅ ختم التحقق الحقيقي */
-        localStorage.setItem("auth_verified", "yes");
-
-        /* الدخول بعد التحقق فقط */
-        window.location.replace("booking.html");
-      }
-    })
-    .catch(() => {
-      msg.innerText = "فشل الاتصال بالسيرفر";
-    });
-}
-</script>
+  const msg
+ 
 </body>
 </html>
