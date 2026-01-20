@@ -16,14 +16,17 @@
 </div>
 
   <script>
-/* إذا المستخدم مسجل مسبقاً لا يدخل auth */
-if (localStorage.getItem("phone")) {
+/* ================== منع الدخول إذا كان متحقق مسبقاً ================== */
+if (
+  localStorage.getItem("auth_verified") === "yes" &&
+  localStorage.getItem("phone")
+) {
   window.location.replace("index.html");
 }
 </script>
 
-   <!-- كود سكريبت صفحة الصيانة -->
-  <script>
+<!-- ================== فحص الصيانة ================== -->
+<script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
 
 fetch(SCRIPT_URL)
@@ -33,17 +36,15 @@ fetch(SCRIPT_URL)
       window.location.replace("maintenance.html");
     }
   })
-  .catch(err => {
-    console.error("Maintenance check failed", err);
-  });
+  .catch(() => {});
 </script>
-  
-<script>
 
+<!-- ================== إرسال رمز التحقق ================== -->
+<script>
 const API = "https://script.google.com/macros/s/AKfycbxzkCyA7V3fcAZqT87mVLeGqFe5mi3XjQIMwIr3jA5OC0fhdsAlCvZZ-wiAFlg653v8/exec";
 
 function sendOTP() {
-  const phone = document.getElementById("phone").value;
+  const phone = document.getElementById("phone").value.trim();
   const msg = document.getElementById("msg");
 
   msg.innerText = "";
@@ -61,25 +62,32 @@ function sendOTP() {
     method: "POST",
     body: formData
   })
-  .then(r => r.text()) // نقرأ كنص أولاً
-  .then(t => {
-    console.log("RAW:", t);
-    const data = JSON.parse(t);
+    .then(r => r.text())
+    .then(t => {
+      console.log("RAW:", t);
+      const data = JSON.parse(t);
 
-    msg.innerText = data.message;
+      msg.innerText = data.message;
 
-    if (data.status === "success") {
-      localStorage.setItem("phone", phone);
-      window.location.href = "verify.html";
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    msg.innerText = "فشل الاتصال بالسيرفر";
-  });
+      if (data.status === "success") {
+        /* 🔒 تخزين الرقم كمؤقت فقط */
+        localStorage.setItem("pending_phone", phone);
+
+        /* تأكد من عدم وجود جلسة قديمة */
+        localStorage.removeItem("phone");
+        localStorage.removeItem("auth_verified");
+
+        /* الانتقال الإجباري لصفحة التحقق */
+        window.location.href = "verify.html";
+      }
+    })
+    .catch(() => {
+      msg.innerText = "فشل الاتصال بالسيرفر";
+    });
 }
 </script>
 </body>
 </html>
+
 
 
