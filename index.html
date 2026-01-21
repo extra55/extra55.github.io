@@ -206,8 +206,37 @@
 #sideMenu.open {
   right: 0;
 }
-
   </style>
+
+  <!-- كود خاص بتسجيل الخروج -->
+  <style>
+    .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 90%;
+  max-width: 300px;
+}
+
+.modal-box button {
+  margin: 10px;
+  padding: 8px 15px;
+}
+  </style> 
 
 </head>
 <body>
@@ -220,7 +249,7 @@
   <div class="menu-header">القائمة</div>
 
   <div class="menu-item" onclick="goAccount()">👤 حسابي</div>
-  <div class="menu-item" onclick="logout()">🚪 تسجيل الخروج</div>
+  <button onclick="openLogoutModal()">🚪 تسجيل خروج</button>
   
 </div>
 
@@ -308,10 +337,18 @@
 
 </div>
 
-
 <footer>
   © 2026 MyClinic - جميع الحقوق محفوظة
 </footer>
+
+  <!-- كود خاص بتسجيل الخروج -->
+  <div id="logoutModal" class="modal">
+  <div class="modal-box">
+    <p>هل أنت متأكد من تسجيل الخروج؟</p>
+    <button onclick="confirmLogout()">نعم</button>
+    <button onclick="closeLogoutModal()">إلغاء</button>
+  </div>
+</div>
 
   <script>
 /* ===== حماية من الدخول بدون OTP ===== */
@@ -407,9 +444,19 @@ function goAccount() {
 }
 
 /* تسجيل الخروج */
-function logout() {
-  if (!confirm("هل أنت متأكد من تسجيل الخروج؟")) return;
+function openLogoutModal() {
+  document.getElementById("logoutModal").style.display = "flex";
+}
 
+function closeLogoutModal() {
+  document.getElementById("logoutModal").style.display = "none";
+}
+
+function confirmLogout() {
+  localStorage.clear();
+  window.location.replace("auth.html");
+}
+   
   // حذف بيانات الجلسة (المعيار الحقيقي)
   localStorage.removeItem("phone");
   localStorage.removeItem("logged_in");
@@ -464,8 +511,3 @@ window.addEventListener("load", () => {
 </script>
 </body>
 </html>
-
-
-
-
-
