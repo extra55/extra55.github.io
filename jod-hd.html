@@ -1,137 +1,51 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jod HD | الأفلام والمسلسلات</title>
-    <style>
-        :root { --main: #ff0000; --bg: #060606; --card: #121212; }
-        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        
-        header { 
-            background: #000; padding: 15px 5%; display: flex; 
-            justify-content: space-between; align-items: center;
-            border-bottom: 2px solid var(--main); position: sticky; top: 0; z-index: 1000;
-        }
-
-        .logo { font-size: 26px; font-weight: bold; text-transform: uppercase; }
-        .logo .red-text { color: var(--main); }
-        .logo .white-text { color: #fff; }
-
-        .search-input { 
-            padding: 10px 15px; border-radius: 5px; border: 1px solid #333;
-            background: #1a1a1a; color: #fff; width: 200px; outline: none;
-        }
-
-        .container { padding: 20px 5%; }
-        .grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); 
-            gap: 15px; 
-        }
-
-        .card { 
-            background: var(--card); border-radius: 8px; overflow: hidden; 
-            border: 1px solid #222; cursor: pointer; transition: 0.3s; position: relative;
-        }
-        .card:hover { border-color: var(--main); transform: scale(1.03); }
-        .card img { width: 100%; height: 210px; object-fit: cover; }
-        .card h3 { font-size: 12px; text-align: center; padding: 8px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .type-badge { position: absolute; top: 5px; right: 5px; background: var(--main); font-size: 10px; padding: 2px 6px; border-radius: 3px; }
-
-        #playerOverlay {
-            display: none; position: fixed; top: 0; left: 0; 
-            width: 100%; height: 100%; background: #000;
-            z-index: 9999; flex-direction: column;
-        }
-        /* منع الإعلانات المنبثقة عبر خاصية sandbox */
-        iframe { width: 100%; flex-grow: 1; border: none; background: #000; }
-        
-        .controls { background: #000; padding: 10px; display: flex; justify-content: center; border-bottom: 1px solid #333; }
-        .close-btn { 
-            background: var(--main); color: #fff; border: none; padding: 8px 25px; 
-            cursor: pointer; font-weight: bold; border-radius: 4px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jod HD</title>
+<style>
+:root { --main: #ff0000; --bg: #000; --card: #111; }
+body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 0; }
+header { background: #000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main); position: sticky; top: 0; z-index: 1000; }
+.logo { font-size: 26px; font-weight: bold; }
+.logo .red { color: var(--main); }
+.logo .white { color: #fff; }
+.search-box { padding: 8px 15px; border-radius: 5px; border: 1px solid #333; background: #1a1a1a; color: #fff; width: 160px; outline: none; }
+.container { padding: 20px 5%; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+.card { background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
+.card:hover { border-color: var(--main); transform: scale(1.05); }
+.card img { width: 100%; height: 210px; object-fit: cover; background: #222; }
+.card h3 { font-size: 12px; text-align: center; padding: 8px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#player { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; }
+iframe { width: 100%; flex-grow: 1; border: none; }
+.close { background: var(--main); color: #fff; border: none; padding: 15px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; }
+</style>
 </head>
 <body>
 
 <header>
-    <div class="logo"><span class="red-text">Jod</span> <span class="white-text">HD</span></div>
-    <input type="text" id="search" class="search-input" placeholder="بحث عن أفلام أو مسلسلات...">
+<div class="logo"><span class="red">Jod</span> <span class="white">HD</span></div>
+<input type="text" id="search" class="search-box" placeholder="بحث...">
 </header>
 
 <div class="container">
-    <div class="grid" id="mainGrid"></div>
+<div class="grid" id="mainGrid">
+<p style="grid-column: 1/-1; text-align: center;">جاري تحميل المحتوى...</p>
+</div>
 </div>
 
-<div id="playerOverlay">
-    <div class="controls">
-        <button class="close-btn" onclick="stopVideo()">إغلاق والعودة للقائمة ×</button>
-    </div>
-    <div id="videoArea" style="width: 100%; height: 100%;"></div>
+<div id="player">
+<button class="close" onclick="stop()">إغلاق المشاهدة ×</button>
+<div id="video" style="width: 100%; height: 100%;"></div>
 </div>
 
 <script>
-    const key = '809366e63282490e7225c5897096e191';
-    const grid = document.getElementById('mainGrid');
+const API_KEY = '809366e63282490e7225c5897096e191';
+const grid = document.getElementById('mainGrid');
 
-    // جلب الأفلام والمسلسلات معاً
-    async function loadContent(query = '') {
-        const movieUrl = query 
-            ? `https://api.themoviedb.org/3/search/multi?api_key=${key}&query=${encodeURIComponent(query)}&language=ar`
-            : `https://api.themoviedb.org/3/trending/all/week?api_key=${key}&language=ar`;
-
-        try {
-            const r = await fetch(movieUrl);
-            const d = await r.json();
-            render(d.results);
-        } catch (e) {
-            console.error("خطأ في الاتصال");
-        }
-    }
-
-    function render(items) {
-        grid.innerHTML = items.map(item => {
-            if (!item.poster_path) return '';
-            const title = item.title || item.name;
-            const type = item.media_type === 'tv' ? 'مسلسل' : 'فيلم';
-            return `
-                <div class="card" onclick="play('${item.id}', '${item.media_type || 'movie'}')">
-                    <span class="type-badge">${type}</span>
-                    <img src="https://image.tmdb.org/t/p/w400${item.poster_path}" alt="${title}">
-                    <h3>${title}</h3>
-                </div>
-            `;
-        }).join('');
-    }
-
-    function play(id, type) {
-        // استخدام سيرفر بديل مع إضافة خاصية sandbox لتقليل الإعلانات
-        const embedUrl = type === 'tv' 
-            ? `https://vidsrc.to/embed/tv/${id}` 
-            : `https://vidsrc.to/embed/movie/${id}`;
-            
-        const videoArea = document.getElementById('videoArea');
-        // خاصية sandbox="allow-forms allow-scripts allow-same-origin" تمنع فتح نوافذ جديدة
-        videoArea.innerHTML = `<iframe src="${embedUrl}" sandbox="allow-forms allow-scripts allow-same-origin" allowfullscreen></iframe>`;
-        
-        document.getElementById('playerOverlay').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function stopVideo() {
-        document.getElementById('playerOverlay').style.display = 'none';
-        document.getElementById('videoArea').innerHTML = '';
-        document.body.style.overflow = 'auto';
-    }
-
-    let timer;
-    document.getElementById('search').oninput = (e) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => loadContent(e.target.value), 500);
-    };
-
-    window.onload = () => loadContent();
 </script>
 
 </body>
