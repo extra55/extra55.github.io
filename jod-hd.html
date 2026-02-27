@@ -11,7 +11,6 @@ body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; p
 header { background: #000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main); position: sticky; top: 0; z-index: 1000; }
 .logo { font-size: 26px; font-weight: bold; }
 .logo .red { color: var(--main); }
-.logo .white { color: #fff; }
 .search-box { padding: 8px 15px; border-radius: 5px; border: 1px solid #333; background: #1a1a1a; color: #fff; width: 160px; outline: none; }
 .container { padding: 20px 5%; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
@@ -27,13 +26,13 @@ iframe { width: 100%; flex-grow: 1; border: none; }
 <body>
 
 <header>
-<div class="logo"><span class="red">Jod</span> <span class="white">HD</span></div>
+<div class="logo"><span class="red">Jod</span> HD</div>
 <input type="text" id="search" class="search-box" placeholder="بحث...">
 </header>
 
 <div class="container">
 <div class="grid" id="mainGrid">
-<p style="grid-column: 1/-1; text-align: center;">جاري تحميل المحتوى...</p>
+<p id="msg" style="grid-column: 1/-1; text-align: center; padding-top: 50px;">جاري تحميل مكتبة TMDB...</p>
 </div>
 </div>
 
@@ -43,6 +42,7 @@ iframe { width: 100%; flex-grow: 1; border: none; }
 </div>
 
 <script>
+// مفتاح TMDB API نشط
 const API_KEY = '809366e63282490e7225c5897096e191';
 const grid = document.getElementById('mainGrid');
 
