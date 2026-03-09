@@ -1,51 +1,240 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jod HD</title>
-<style>
-:root { --main: #ff0000; --bg: #000; --card: #111; }
-body { background: var(--bg); color: #fff; font-family: sans-serif; margin: 0; padding: 0; }
-header { background: #000; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main); position: sticky; top: 0; z-index: 1000; }
-.logo { font-size: 26px; font-weight: bold; color: #fff; text-decoration: none; }
-.logo span { color: var(--main); }
-.search-box { padding: 8px 15px; border-radius: 5px; border: 1px solid #333; background: #1a1a1a; color: #fff; width: 160px; outline: none; }
-.container { padding: 20px 5%; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-.card { background: var(--card); border-radius: 8px; overflow: hidden; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
-.card:hover { border-color: var(--main); transform: scale(1.05); }
-.card img { width: 100%; height: 200px; object-fit: cover; background: #222; display: block; }
-.card h3 { font-size: 11px; text-align: center; padding: 8px; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #eee; }
-#player { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; flex-direction: column; }
-iframe { width: 100%; flex-grow: 1; border: none; }
-.close { background: var(--main); color: #fff; border: none; padding: 15px; cursor: pointer; font-weight: bold; width: 100%; font-size: 16px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jod HD</title>
+  <style>
+    :root { --main-red: #ff0000; --bg-dark: #0b0b0b; --card-bg: #161616; --input-bg: #1f1f1f; }
+    
+    html, body { height: 100%; margin: 0; }
+    body { background: var(--bg-dark); color: #fff; font-family: sans-serif; display: flex; flex-direction: column; }
+     
+    header { background: #000; padding: 10px 15px; border-bottom: 2px solid var(--main-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+    .logo { font-size: 22px; font-weight: bold; color: var(--main-red); }
+    .logo .white-text { color: #fff; }
+    .search-box { background: var(--input-bg); color: #ccc; border: 1px solid #333; padding: 8px 12px; border-radius: 5px; width: 140px; outline: none; font-size: 13px; }
+
+    .nav-tabs { display: flex; justify-content: center; gap: 10px; padding: 15px; background: #000; flex-wrap: wrap; }
+    .tab-btn { background: none; border: 1px solid #444; color: #aaa; padding: 6px 15px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-size: 13px; }
+    .tab-btn.active { background: var(--main-red); color: #fff; border-color: var(--main-red); }
+
+    .cat-bar { display: none; justify-content: center; gap: 8px; padding: 10px; background: #111; overflow-x: auto; align-items: center; }
+    .cat-btn { background: #222; color: #eee; border: 1px solid #333; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+    .cat-btn.active { border-color: var(--main-red); color: var(--main-red); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; padding: 15px; flex-grow: 1; }
+    .card { background: var(--card-bg); border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid #222; height: fit-content; }
+    .card img { width: 100%; height: 185px; object-fit: cover; }
+    .card-info { padding: 8px; text-align: center; }
+    .card h3 { font-size: 11px; margin: 0; height: 30px; overflow: hidden; color: #eee; }
+    .card .year { font-size: 10px; color: var(--main-red); margin-top: 4px; display: block; }
+
+    #playerOverlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; flex-direction: column; }
+    .player-header { background: #111; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; direction: ltr; }
+    .hint-text { background: #1a1a1a; color: #ffcc00; font-size: 12px; text-align: center; padding: 8px; border-bottom: 1px solid #333; }
+    .server-bar { display: flex; gap: 8px; padding: 10px; background: #000; justify-content: center; align-items: center; }
+    .srv-btn { background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
+    .srv-btn.active { background: var(--main-red); }
+    
+    /* زر التحديث الاحترافي داخل المشغل */
+    .refresh-live { background: #222; color: #00ff00; border: 1px solid #444; padding: 5px 12px; border-radius: 4px; font-size: 11px; cursor: pointer; display: none; }
+    .refresh-live:active { transform: scale(0.95); }
+
+    iframe { width: 100%; flex-grow: 1; border: none; }
+
+    .load-more { text-align: center; padding: 20px; }
+    .btn-more { background: var(--main-red); color: #fff; border: none; padding: 10px 30px; border-radius: 5px; cursor: pointer; }
+     
+    footer { text-align: center; padding: 30px; color: #666; font-size: 12px; border-top: 1px solid #222; background: #000; margin-top: auto; }
+  </style>
 </head>
 <body>
 
 <header>
-<a href="#" class="logo"><span>Jod</span> HD</a>
-<input type="text" id="search" class="search-box" placeholder="بحث...">
+  <div class="logo">Jod <span class="white-text">HD</span></div>
+  <input type="text" id="search" class="search-box" placeholder="بحث...">
 </header>
 
-<div class="container">
-<div class="grid" id="mainGrid">
-<p id="loading" style="grid-column: 1/-1; text-align: center; padding-top: 50px;">جاري تحميل مكتبة الأفلام...</p>
-</div>
+<div class="nav-tabs">
+  <button class="tab-btn active" id="btn-movie" onclick="switchMode('movie')">أفلام</button>
+  <button class="tab-btn" id="btn-tv" onclick="switchMode('tv')">مسلسلات</button>
+  <button class="tab-btn" id="btn-live" onclick="switchMode('live')">قنوات TV</button>
 </div>
 
-<div id="player">
-<button class="close" onclick="stop()">إغلاق المشاهدة ×</button>
-<div id="video" style="width: 100%; height: 100%;"></div>
+<div class="cat-bar" id="categoryBar">
+  <button class="cat-btn active" onclick="filterChannels('الكل')">الكل</button>
+  <button class="cat-btn" onclick="filterChannels('إخبارية')">إخبارية</button>
+  <button class="cat-btn" onclick="filterChannels('رياضية')">رياضية</button>
+  <button class="cat-btn" onclick="filterChannels('منوعة')">منوعة</button>
+  <button class="cat-btn" onclick="filterChannels('وثائقية')">وثائقية</button>
+  <button class="cat-btn" onclick="filterChannels('ترفيه')">ترفيه</button>
+  <button class="cat-btn" onclick="filterChannels('اسلامية')">اسلامية</button>
+</div>
+
+<div class="grid" id="mainGrid"></div>
+
+<div class="load-more" id="loadMoreArea">
+  <button class="btn-more" onclick="loadMore()">تحميل المزيد</button>
+</div>
+
+<footer>
+  جميع الحقوق محفوظة © 2026 Jod HD
+</footer>
+
+<div id="playerOverlay">
+  <div class="player-header">
+    <span style="cursor: pointer; color: red; font-weight: bold; font-size: 16px;" onclick="closePlayer()">إغلاق ×</span>
+    <span style="font-size: 14px; color: #fff; direction: rtl;">مشاهدة ممتعة</span>
+  </div>
+  <div class="hint-text" id="hintTextContainer"></div>
+  <div class="server-bar" id="servers"></div>
+  <div style="text-align:center; padding-bottom:10px; background:#000;">
+      <button id="refreshLiveBtn" class="refresh-live" onclick="reloadCurrentChannel()">🔄 تحديث القناة</button>
+  </div>
+  <div id="videoArea" style="flex-grow: 1;"></div>
 </div>
 
 <script>
-const API_KEY = 'fc64ab0f98e946efbfe2c8d067cfe8b7';
-const grid = document.getElementById('mainGrid');
+  const API_KEY = 'fc64ab0f98e946efbfe2c8d067cfe8b7';
+  let currentMode = 'movie'; 
+  let currentPage = 1;
+  let lastChannelUrl = ''; // لتخزين آخر رابط قناة تم فتحه
 
+  const channelsData = [
+    { name: "الجزيرة مباشر", cat: "إخبارية", img: "https://e7.pngegg.com/pngimages/433/580/png-clipart-al-jazeera-english-al-jazeera-media-network-arabian-peninsula-news-others-miscellaneous-television.png", url: "https://live-hls-web-ajm-bp.thehlive.com/AJM/index.m3u8" },
+    { name: "الحدث", cat: "إخبارية", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE-mYmSPClLZK5NSV8vfEC9goaYw2cwZqOVw&s", url: "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8" },
+    { name: "سكاي نيوز عربية", cat: "إخبارية", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85BtKiTNl34Xc4fi0-VziZcmOWyFT1MMz-vK2N4i7cg&s", url: "https://live-stream.skynewsarabia.com/c-horizontal-channel/horizontal-stream/index.m3u8" },
+    { name: "الشرقية الاخبارية", cat: "إخبارية", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgtzRLt880DyPgZBxtZkWZZhErX6VZLAXxlA&s", url: "https://5d94523502c2d.streamlock.net/alsharqiyalive/mystream/playlist.m3u8" },
+    { name: "الشمس", cat: "إخبارية", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVXBkGebiNsGUSxh7ce-acPw0vzizL_0xH3INpeD4h&s", url: "https://stream.shams.tv/hls/stream.m3u8" },
+    { name: "القران الكريم", cat: "اسلامية", img: "https://pbs.twimg.com/profile_images/1313539609268285442/86vzT1LT_400x400.jpg", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8" },
+    { name: "الشارقة الرياضية ", cat: "رياضية", img: "https://static.wikia.nocookie.net/logopedia/images/8/82/Sharjah_Sports_TV_Logo_2014.png", url: "https://svs.itworkscdn.net/smc4sportslive/smc4.smil/playlist.m3u8" },
+    { name: "الشرق الوثائقية", cat: "وثائقية", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEAXcsqygNvXd02LJlwr4V3TVMuUOaPp0HrA&s", url: "https://svs.itworkscdn.net/asharqdocumentarylive/asharqdocumentary.smil/playlist_dvr.m3u8" },
+    { name: "الشرقية", cat: "منوعة", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVy8635d9IGBaeqt5QlU3i0u-FwRevPJM3UA&s", url: "https://5d94523502c2d.streamlock.net/home/mystream/playlist.m3u8" },
+    { name: "زاكروس", cat: "منوعة", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSePBgKy-GKV42JPDnvwG9DJB0BrQDTz126Eg&s", url: "https://5a3ed7a72ed4b.streamlock.net/zagrostv/SMIL:myStream.smil/playlist.m3u8" },
+    { name: "Watar FM", cat: "ترفيه", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoby70X04quG8p_dAkL2UZu8nsJC3pKnCuxg&s", url: "https://svs.itworkscdn.net/smcwatarlive/smcwatar/playlist.m3u8" }
+  ];
+
+  async function fetchData(query = '', page = 1, append = false) {
+    if (currentMode === 'live') return;
+    let url = query 
+      ? `https://api.themoviedb.org/3/search/${currentMode}?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}&language=ar`
+      : `https://api.themoviedb.org/3/${currentMode}/popular?api_key=${API_KEY}&page=${page}&language=ar`;
+    const res = await fetch(url);
+    const data = await res.json();
+    render(data.results, append);
+  }
+
+  function render(results, append) {
+    const grid = document.getElementById('mainGrid');
+    if (!append) grid.innerHTML = '';
+    grid.innerHTML += results.map(m => {
+      if (!m.poster_path) return '';
+      const title = m.title || m.name;
+      const date = m.release_date || m.first_air_date || '';
+      const year = date ? date.split('-')[0] : 'N/A';
+      return `
+        <div class="card" onclick="openPlayer('${m.id}')">
+          <img src="https://image.tmdb.org/t/p/w300${m.poster_path}">
+          <div class="card-info">
+            <h3>${title}</h3>
+            <span class="year">${year}</span>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderChannels(filter = 'الكل') {
+    const grid = document.getElementById('mainGrid');
+    grid.innerHTML = '';
+    const filtered = filter === 'الكل' ? channelsData : channelsData.filter(c => c.cat === filter);
+    grid.innerHTML = filtered.map(c => `
+      <div class="card" onclick="openLivePlayer('${c.url}', '${c.name}')">
+        <img src="${c.img}">
+        <div class="card-info">
+          <h3>${c.name}</h3>
+          <span class="year">${c.cat}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function switchMode(mode) {
+    currentMode = mode;
+    currentPage = 1;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + mode).classList.add('active');
+    const catBar = document.getElementById('categoryBar');
+    const loadMoreBtn = document.getElementById('loadMoreArea');
+    if(mode === 'live') {
+        catBar.style.display = 'flex';
+        loadMoreBtn.style.display = 'none';
+        renderChannels();
+    } else {
+        catBar.style.display = 'none';
+        loadMoreBtn.style.display = 'block';
+        fetchData('', 1, false);
+    }
+  }
+
+  function filterChannels(cat) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderChannels(cat);
+  }
+
+  function loadMore() {
+    currentPage++;
+    fetchData(document.getElementById('search').value, currentPage, true);
+  }
+
+  function openPlayer(id) {
+    document.getElementById('refreshLiveBtn').style.display = 'none'; // إخفاء زر التحديث في الأفلام
+    document.getElementById('hintTextContainer').innerText = "💡 عزيزي المشاهد: إذا لم يعمل السيرفر، جرب السيرفر البديل. ولتفعيل الترجمة اضغط (CC) داخل المشغل";
+    document.getElementById('playerOverlay').style.display = 'flex';
+    const srvs = [
+      { name: 'سيرفر 1 (أساسي)', url: `https://vidsrc.cc/v2/embed/${currentMode}/${id}?auto_lang=ar` },
+      { name: 'سيرفر 2 (بديل)', url: `https://player.autoembed.cc/embed/${currentMode}/${id}` }
+    ];
+    const bar = document.getElementById('servers');
+    bar.innerHTML = srvs.map((s, i) => `<button class="srv-btn ${i==0?'active':''}" onclick="setSrv('${s.url}', this)">${s.name}</button>`).join('');
+    setSrv(srvs[0].url);
+  }
+
+  function openLivePlayer(url, name) {
+    lastChannelUrl = url; // تخزين الرابط
+    document.getElementById('refreshLiveBtn').style.display = 'inline-block'; // إظهار زر التحديث في القنوات
+    document.getElementById('hintTextContainer').innerText = "💡 ملاحظة: إذا لم يعمل البث، قد يكون المصدر متوقفاً مؤقتاً";
+    document.getElementById('playerOverlay').style.display = 'flex';
+    document.getElementById('servers').innerHTML = `<button class="srv-btn active">بث مباشر: ${name}</button>`;
+    setSrv(url);
+  }
+
+  function reloadCurrentChannel() {
+      if(lastChannelUrl) setSrv(lastChannelUrl);
+  }
+
+  function setSrv(url, btn) {
+    if(btn) {
+      document.querySelectorAll('.srv-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+    const area = document.getElementById('videoArea');
+    area.innerHTML = `<iframe src="${url}" allowfullscreen sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts"></iframe>`;
+  }
+
+  function closePlayer() {
+    document.getElementById('playerOverlay').style.display = 'none';
+    document.getElementById('videoArea').innerHTML = '';
+  }
+
+  document.getElementById('search').oninput = (e) => {
+    if(currentMode !== 'live') {
+        currentPage = 1;
+        fetchData(e.target.value, 1, false);
+    }
+  };
+  fetchData();
 </script>
-
 </body>
 </html>
