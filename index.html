@@ -3,132 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقعي الإلكتروني</title>
+    <title>شركة الجود لتقنية المعلومات</title>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --primary-color: #0d6efd;
+            --primary-dark: #0a58ca;
+            --secondary-color: #0f172a;
+            --accent-color: #06b6d4;
+            --bg-light: #f8fafc;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
         }
+
         body {
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: var(--bg-light);
+            color: var(--text-main);
             line-height: 1.6;
         }
+
+        /* القائمة العلوية */
         header {
-            background-color: #2c3e50;
-            color: #fff;
-            padding: 1rem 2rem;
+            background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.2rem 2rem;
         }
-        header .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-left: 1.5rem;
-            transition: color 0.3s;
-        }
-        nav a:hover {
-            color: #1abc9c;
-        }
-        .hero {
-            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('https://picsum.photos') no-repeat center center/cover;
-            color: white;
-            text-align: center;
-            padding: 6rem 2rem;
-        }
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-        .btn {
-            background-color: #1abc9c;
-            color: white;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-        .btn:hover {
-            background-color: #16a085;
-        }
-        .features {
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--secondary-color);
             display: flex;
-            justify-content: space-around;
-            padding: 4rem 2rem;
-            background-color: #fff;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
         }
-        .feature-box {
-            flex: 1;
-            min-width: 250px;
-            margin: 1rem;
-            padding: 2rem;
+
+        .logo i {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: var(--white) !important;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #1ebc57;
+            transform: translateY(-2px);
+        }
+
+        /* القسم الرئيسي */
+        .hero {
+            padding: 180px 2rem 100px;
             text-align: center;
-            background: #fdfdfd;
-            border: 1px solid #eee;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--white);
+            position: relative;
         }
-        .feature-box h3 {
+
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
             margin-bottom: 1rem;
-            color: #2c3e50;
+            color: var(--white);
         }
-        footer {
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* قسم من نحن */
+        .section {
+            padding: 80px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
             text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .about-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .about-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .about-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        /* قسم معرض الأعمال */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .portfolio-img {
+            width: 100%;
+            height: 200px;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 3rem;
+        }
+
+        .portfolio-content {
             padding: 1.5rem;
-            background-color: #2c3e50;
-            color: white;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* قسم سياسة الخصوصية */
+        .privacy-box {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            line-height: 1.8;
+        }
+
+        .privacy-box h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+
+        /* الفوتر (تذييل الصفحة) */
+        footer {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            border-top: 1px solid #334155;
+        }
+
+        footer p {
+            font-size: 1rem;
+            color: #94a3b8;
+        }
+
+        /* الاستجابة للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- القائمة العلوية -->
     <header>
-        <div class="logo">Al-Jod Company</div>
-        <nav>
-            <a href="#">الرئيسية</a>
-            <a href="#">المميزات</a>
-            <a href="#">من نحن</a>
-            <a href="#">اتصل بنا</a>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-code"></i>
+                شركة الجود
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">الصفحة الرئيسية</a></li>
+                <li><a href="#about">من نحن</a></li>
+                <li><a href="#portfolio">أعمالنا</a></li>
+                <li><a href="#privacy">سياسة الخصوصية</a></li>
+                <li>
+                    <a href="https://wa.me/9647803342472" target="_blank" class="btn-whatsapp">
+                        <i class="fa-brands fa-whatsapp"></i> راسلنا
+                    </a>
+                </li>
+            </ul>
         </nav>
     </header>
 
-    <section class="hero">
+    <!-- الهيدر الرئيسي -->
+    <section id="home" class="hero">
         <h1>شركة الجود لتقنية المعلومات</h1>
-        <p>نقدم لك أفضل الحلول التقنية لتطوير أعمالك  بكل سهولة.</p>
-        <a href="#" class="btn">ابدأ الان</a>
-    </section>
-
-<section class="features">
-        <div class="feature-box">
-            <h3>سرعة عالية</h3>
-            <p>أكواد نظيفة ومرتبة تضمن أداءً صاروخياً لموقعك.</p>
-        </div>
-        <div class="feature-box">
-            <h3>تصميم متجاوب</h3>
-            <p>يعمل الموقع بكفاءة عالية على الهواتف والأجهزة الذكية.</p>
-        </div>
-        <div class="feature-box">
-            <h3>دعم فني</h3>
-            <p>فريق جاهز لمساعدتك وحل أي مشكلة تقنية تواجهك.</p>
+        <p>نبتكر الحلول الرقمية، نصمم ونبني المواقع الإلكترونية، ونطور تطبيقات الهاتف والبرمجيات الاحترافية لتلبية تطلعات عملائنا.</p>
+        <div class="hero-buttons">
+            <a href="https://wa.me/9647803342472" target="_blank" class="btn-primary">
+                <i class="fa-brands fa-whatsapp"></i> تواصل معنا الآن
+            </a>
         </div>
     </section>
 
+    <!-- قسم من نحن -->
+    <section id="about" class="section">
+        <h2 class="section-title">من نحن</h2>
+        <p class="section-subtitle">نوفر حلولاً برمجية متكاملة تساعد الشركات والأفراد على النمو والتطور الرقمي</p>
+        
+        <div class="about-grid">
+            <div class="about-card">
+                <i class="fa-solid fa-mobile-screen-button"></i>
+                <h3>صناعة التطبيقات</h3>
+                <p>تطوير تطبيقات هواتف ذكية (iOS و Android) متوازنة السلاسة والأداء لتجربة مستخدم مثالية.</p>
+            </div>
+            <div class="about-card">
+                <i class="fa-solid fa-laptop-code"></i>
+                <h3>تصميم وبناء المواقع</h3>
+                <p>إنشاء مواقع إلكترونية حديثة ومستجيبة مع كافة الشاشات وأجهزة الهاتف والكمبيوتر.</p>
+            </div>
+            <div class="about-card">
+                <i class="fa-solid fa-gears"></i>
+                <h3>الأنظمة والبرامج</h3>
+                <p>بناء أنظمة برمجية مخصصة لإدارة الأعمال والمؤسسات بكفاءة وأمان عاليين.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم معرض الأعمال -->
+    <section id="portfolio" class="section">
+        <h2 class="section-title">معرض أعمالنا</h2>
+        <p class="section-subtitle">نماذج من المشاريع والحلول التقنية التي قمنا بتنفيذها</p>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-card">
+                <div class="portfolio-img">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <div class="portfolio-content">
+                    <h3>تطبيق متجر إلكتروني</h3>
+                    <p>تطبيق متكامل لتسوق المنتجات مع دعم الدفع الإلكتروني ونظام تتبع الطلبات.</p>
+                    <span class="tag">تطبيق جوال</span>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <div class="portfolio-img">
+                    <i class="fa-solid fa-hospital"></i>
+                </div>
+                <div class="portfolio-content">
+                    <h3>نظام إدارة العيادات والمراكز الطبية</h3>
+                    <p>منصة شاملة لحجز المواعيد وإدارة ملفات المرضى والفواتير الطبية.</p>
+                    <span class="tag">نظام برلمجي</span>
+                </div>
+            </div>
+
+            <div class="portfolio-card">
+                <div class="portfolio-img">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
+                <div class="portfolio-content">
+                    <h3>موقع شركة مقاولات واستثمارات</h3>
+                    <p>موقع إلكتروني تعريفي حديث يعرض مشاريع الشركة والخدمات بشكل متناسق.</p>
+                    <span class="tag">موقع إلكتروني</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم سياسة الخصوصية -->
+    <section id="privacy" class="section">
+        <h2 class="section-title">سياسة الخصوصية</h2>
+        <p class="section-subtitle">التزامنا بحماية بيانات عملائنا وخصوصيتهم</p>
+
+        <div class="privacy-box">
+            <p>في <strong>شركة الجود لتقنية المعلومات</strong>، نضع خصوصية وأمان معلومات عملائنا في مقدمة أولوياتنا.</p>
+            
+            <h3>1. جمع المعلومات</h3>
+            <p>نقوم بجمع البيانات اللازمة فقط لتقديم خدماتنا، مثل الاسم ومعلومات التواصل أثناء المراسلة أو تنفيذ المشاريع.</p>
+
+            <h3>2. حماية البيانات</h3>
+            <p>نتبع أعلى معايير الأمان لمنع أي وصول غير مصرح به أو تسريب للبيانات الخاصة بعملائنا أو مشاريعهم.</p>
+
+            <h3>3. استخدام المعلومات</h3>
+            <p>تُستخدم البيانات التي يتم التزويد بها فقط بغرض التواصل، تقديم الدعم الفني، وتنفيذ الخدمات البرمجية المطلوبة.</p>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
     <footer>
-        <p>جميع الحقوق محفوظة &copy; 2026</p>
+        <p>جميع الحقوق محفوظة لشركة الجود لتقنية المعلومات &copy; 2026</p>
     </footer>
 
 </body>
