@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#ff9800" />
+  <title>أبطال المهام - تطبيق الأطفال والأبوين</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-child: linear-gradient(160deg, #e0f7fa 0%, #fffde7 50%, #fff3e0 100%);
+      --bg-parent: #f1f5f9;
+      --primary-child: #ff6f00;
+      --secondary-child: #0288d1;
+      --accent-gold: #ffc107;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --parent-dark: #0f172a;
+      --parent-teal: #0d9488;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --radius: 20px;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg-child);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    body.parent-mode {
+      background: var(--bg-parent);
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px 16px 96px;
+    }
+
+    /* شاشة البداية - اختيار الحساب */
+    .gate-screen {
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #fff;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: var(--primary-child);
+      box-shadow: var(--shadow);
+      margin: 0 auto;
+      font-size: 14px;
+    }
+
+    .gate-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0;
+      color: #0f172a;
+    }
+
+    .gate-subtitle {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    .role-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (min-width: 520px) {
+      .role-cards {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .role-card {
+      border: none;
+      border-radius: 26px;
+      padding: 26px 20px;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .role-card:active {
+      transform: scale(0.97);
+    }
+
+    .role-card.child-card {
+      background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+      color: #fff;
+      border: 4px solid #ffe082;
+    }
+
+    .role-card.parent-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      border: 4px solid #334155;
+    }
+
+    .role-icon {
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .role-name {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .role-desc {
+      font-size: 13px;
+      opacity: 0.92;
+    }
+
+    /* البطاقات والحقول */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 14px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      font-weight: 700;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 14px;
+      padding: 11px 16px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.15s ease, transform 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--primary-child);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: var(--secondary-child);
+      color: #fff;
+    }
+
+    .btn-parent {
+      background: var(--parent-teal);
+      color: #fff;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-ghost {
+      background: #e2e8f0;
+      color: #334155;
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+      text-align: right;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #334155;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 15px;
+      outline: none;
+      background: #f8fafc;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-child);
+      background: #fff;
+    }
+
+    /* عدادات النقاط والرصيد في الصفحة الرئيسية للطفل */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stat-box {
+      border-radius: 22px;
+      padding: 16px;
+      color: #fff;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-points {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+    }
+
+    .stat-balance {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      opacity: 0.95;
+      font-weight: 700;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 800;
+      margin-top: 4px;
+    }
+
+    /* بطاقة المهمة */
+    .task-item {
+      border: 2px solid #f1f5f9;
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 10px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .points-badge {
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .task-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tag-repeat {
+      font-size: 12px;
+      color: #0288d1;
+      background: #e0f2fe;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .tag-once {
+      font-size: 12px;
+      color: #64748b;
+      background: #f1f5f9;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    /* شريط التنقل السفلي */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 4px;
+      z-index: 50;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 10px;
+    }
+
+    .nav-btn.active.child-nav {
+      color: var(--primary-child);
+      background: #fff7ed;
+    }
+
+    .nav-btn.active.parent-nav {
+      color: var(--parent-teal);
+      background: #f0fdfa;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* تنبيهات */
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      z-index: 200;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      max-width: 90%;
+      text-align: center;
+    }
+
+    .status-pill {
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .status-Pending { background: #fef9c3; color: #854d0e; }
+    .status-Approved { background: #dcfce7; color: #166534; }
+    .status-Rejected { background: #fee2e2; color: #991b1b; }
+
+    .preview-box {
+      background: #f0fdf4;
+      border: 1.5px dashed #22c55e;
+      border-radius: 14px;
+      padding: 12px;
+      margin: 10px 0;
+      font-weight: 700;
+      color: #15803d;
+      text-align: center;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .quick-btn {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <div class="container">
+    <!-- 1. شاشة البداية: اختيار نوع الحساب -->
+    <div id="gateScreen" class="gate-screen">
+      <div class="hero-badge">⭐ نظام المهام والمكافآت الذكي</div>
+      <div>
+        <h1 class="gate-title">أهلاً بك في عالم الأبطال!</h1>
+        <p class="gate-subtitle">اختر نوع الحساب للمتابعة إلى صفحة تسجيل الدخول</p>
+      </div>
+
+      <div class="role-cards">
+        <button class="role-card child-card" onclick="openLogin('child')">
+          <span class="role-icon">🦁🚀</span>
+          <span class="role-name">حساب الطفل</span>
+          <span class="role-desc">أنجز مهامك، اجمع النقاط، وحوّلها إلى دينار عراقي</span>
+        </button>
+
+        <button class="role-card parent-card" onclick="openLogin('parent')">
+          <span class="role-icon">👨‍👩‍👧‍👦🛡️</span>
+          <span class="role-name">حساب الأبوين</span>
+          <span class="role-desc">أدر حسابات الأطفال، وراجع طلبات المهام والسحب</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. شاشة تسجيل الدخول (منفصلة لكل حساب) -->
+    <div id="loginScreen" class="hidden">
+      <div class="top-bar">
+        <button class="btn btn-ghost" onclick="backToGate()">⬅️ رجوع للبداية</button>
+        <span id="loginRoleBadge" class="points-badge">تسجيل الدخول</span>
+      </div>
+
+      <div class="card">
+        <h2 id="loginHeading" style="margin-top:0; text-align:center;">تسجيل الدخول</h2>
+        <div class="form-group">
+          <label>اسم المستخدم</label>
+          <input type="text" id="loginUsername" class="form-control" placeholder="أدخل اسم المستخدم" />
+        </div>
+        <div class="form-group">
+          <label>كلمة المرور</label>
+          <input type="password" id="loginPassword" class="form-control" placeholder="أدخل كلمة المرور" />
+        </div>
+        <button class="btn btn-primary btn-block" id="loginSubmitBtn" onclick="handleLogin()">دخول</button>
+
+        <div id="parentRegisterBox" class="hidden" style="margin-top:16px; border-top:1px solid #e2e8f0; padding-top:14px;">
+          <p style="font-size:13px; color:#64748b; margin:0 0 10px;">ليس لديك حساب أبوين بعد؟ أنشئ حساباً جديداً:</p>
+          <div class="form-group">
+            <input type="text" id="regParentUser" class="form-control" placeholder="اسم مستخدم جديد للأبوين" />
+          </div>
+          <div class="form-group">
+            <input type="password" id="regParentPass" class="form-control" placeholder="كلمة مرور جديدة" />
+          </div>
+          <button class="btn btn-parent btn-block" onclick="handleRegisterParent()">إنشاء حساب أبوين</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. واجهة حساب الطفل -->
+    <div id="childApp" class="hidden">
+      <div class="top-bar">
+        <div class="user-pill">
+          <span id="childAvatar" style="font-size:22px;">🦁</span>
+          <span id="childNameDisplay">البطل</span>
+        </div>
+        <button class="btn btn-ghost" onclick="logout()">خروج</button>
+      </div>
+
+      <!-- تبويب الرئيسية -->
+      <div id="childTab-home">
+        <div class="stats-grid">
+          <div class="stat-box stat-points">
+            <div class="stat-label">🌟 مجموع النقاط</div>
+            <div class="stat-value" id="childPointsVal">0</div>
+          </div>
+          <div class="stat-box stat-balance">
+            <div class="stat-label">💵 الرصيد المالي</div>
+            <div class="stat-value" id="childBalanceVal">0 د.ع</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">🎯 كيف تكسب وتستفيد؟</h3>
+          <p style="font-size:14px; line-height:1.7; color:#475569; margin:0 0 12px;">
+            • نفّذ مهامك اليومية واضغط <b>إنجاز</b> ليوافق عليها الأهل وتضاف نقاطك.<br>
+            • كل <b>100 نقطة = 250 دينار عراقي</b> (أقل تحويل <b>200 نقطة</b>).<br>
+            • أقل مبلغ لطلب سحب الأموال هو <b>1,000 دينار عراقي</b>.
+          </p>
+          <div class="quick-grid">
+            <div class="quick-btn" onclick="switchChildTab('tasks')">📋 المهام اليومية</div>
+            <div class="quick-btn" onclick="switchChildTab('convert')">🔄 تحويل النقاط</div>
+            <div class="quick-btn" onclick="switchChildTab('withdraw')">💰 سحب الأموال</div>
+            <div class="quick-btn" onclick="switchChildTab('history')">📜 سجل الحركات</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- تبويب المهام اليومية -->
+      <div id="childTab-tasks" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">📋 المهام اليومية</h3>
+          <p style="font-size:13px; color:#64748b; margin-top:0;">المهام المميزة بـ (قابلة للتكرار) يمكن إرسالها أكثر من مرة في اليوم، والبقية مرة واحدة يومياً.</p>
+          <div id="childTasksList">جاري تحميل المهام...</div>
+        </div>
+      </div>
+
+      <!-- تبويب تحويل النقاط -->
+      <div id="childTab-convert" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">🔄 تحويل النقاط إلى رصيد مالي</h3>
+          <p style="font-size:13px; color:#64748b;">نقاطك الحالية: <b id="convertAvailablePts">0</b> نقطة | الحد الأدنى: <b>200 نقطة</b> (كل 100 نقطة = 250 دينار)</p>
+          <div class="form-group">
+            <label>عدد النقاط المراد تحويلها</label>
+            <input type="number" id="convertPointsInput" class="form-control" min="200" step="10" placeholder="مثال: 200 أو جميع نقاطك" oninput="updateConvertPreview()" />
+          </div>
+          <div style="display:flex; gap:8px; margin-bottom:10px;">
+            <button class="btn btn-ghost" style="flex:1;" onclick="fillAllPoints()">تحويل جميع النقاط</button>
+          </div>
+          <div class="preview-box" id="convertPreview">المبلغ الناتج: 0 دينار عراقي</div>
+          <button class="btn btn-success btn-block" onclick="handleConvertPoints()">تأكيد التحويل الآن</button>
+        </div>
+      </div>
+
+      <!-- تبويب سحب الأموال -->
+      <div id="childTab-withdraw" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">💰 طلب سحب الأموال</h3>
+          <p style="font-size:13px; color:#64748b;">رصيدك الحالي: <b id="withdrawAvailableBal">0</b> دينار | أقل مبلغ للسحب: <b>1,000 دينار</b></p>
+          <div class="form-group">
+            <label>المبلغ المراد سحبه (بالدينار العراقي)</label>
+            <input type="number" id="withdrawAmountInput" class="form-control" min="1000" step="250" placeholder="أدخل المبلغ (1000 فأكثر)" />
+          </div>
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <button class="btn btn-ghost" style="flex:1;" onclick="fillAllBalance()">سحب كامل الرصيد</button>
+          </div>
+          <button class="btn btn-secondary btn-block" onclick="handleWithdrawRequest()">إرسال طلب السحب للأبوين</button>
+        </div>
+      </div>
+
+      <!-- تبويب الحركات -->
+      <div id="childTab-history" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">📜 سجل الحركات</h3>
+          <div id="childTransactionsList">لا توجد حركات بعد.</div>
+        </div>
+      </div>
+
+      <!-- تبويب الإعدادات (الطفل) -->
+      <div id="childTab-settings" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">⚙️ إعدادات حساب الطفل</h3>
+          <div class="form-group">
+            <label>اسم المستخدم الجديد</label>
+            <input type="text" id="childNewUser" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور الجديدة</label>
+            <input type="password" id="childNewPass" class="form-control" />
+          </div>
+          <button class="btn btn-primary btn-block" onclick="handleUpdateCredentials('child')">حفظ التغييرات</button>
+        </div>
+      </div>
+
+      <!-- شريط التنقل السفلي للطفل -->
+      <nav class="bottom-nav">
+        <button class="nav-btn active child-nav" data-ctab="home" onclick="switchChildTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
+        <button class="nav-btn child-nav" data-ctab="tasks" onclick="switchChildTab('tasks')"><span class="nav-icon">⭐</span>المهام</button>
+        <button class="nav-btn child-nav" data-ctab="convert" onclick="switchChildTab('convert')"><span class="nav-icon">🔄</span>تحويل</button>
+        <button class="nav-btn child-nav" data-ctab="withdraw" onclick="switchChildTab('withdraw')"><span class="nav-icon">💵</span>سحب</button>
+        <button class="nav-btn child-nav" data-ctab="history" onclick="switchChildTab('history')"><span class="nav-icon">📜</span>الحركات</button>
+        <button class="nav-btn child-nav" data-ctab="settings" onclick="switchChildTab('settings')"><span class="nav-icon">⚙️</span>الإعدادات</button>
+      </nav>
+    </div>
+
+    <!-- 4. واجهة حساب الأبوين -->
+    <div id="parentApp" class="hidden">
+      <div class="top-bar">
+        <div class="user-pill">
+          <span>👨‍👩‍👧‍👦</span>
+          <span id="parentNameDisplay">الأبوين</span>
+          <span id="parentFamilyCode" class="tag-once"></span>
+        </div>
+        <button class="btn btn-ghost" onclick="logout()">خروج</button>
+      </div>
+
+      <!-- الرئيسية للأبوين -->
+      <div id="parentTab-home">
+        <div class="card">
+          <h3 style="margin-top:0;">📊 نظرة عامة على العائلة</h3>
+          <p style="font-size:14px; color:#475569; margin-top:0;">
+            من هنا يمكنك متابعة نقاط وأرصدة الأطفال، إضافة طفل جديد، وإدارة قائمة المهام اليومية.
+          </p>
+          <div id="parentChildrenSummary">جاري التحميل...</div>
+        </div>
+
+        <div class="card">
+          <h4 style="margin-top:0;">➕ إضافة حساب طفل جديد</h4>
+          <div class="form-group">
+            <label>اسم الطفل</label>
+            <input type="text" id="newChildName" class="form-control" placeholder="مثال: علي" />
+          </div>
+          <div class="form-group">
+            <label>اسم المستخدم للطفل</label>
+            <input type="text" id="newChildUser" class="form-control" placeholder="مثال: ali2026" />
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور للطفل</label>
+            <input type="text" id="newChildPass" class="form-control" placeholder="أدخل كلمة مرور" />
+          </div>
+          <div class="form-group">
+            <label>رمز الطفل (Avatar)</label>
+            <select id="newChildAvatar" class="form-control">
+              <option value="🦁">🦁 أسد شجاع</option>
+              <option value="🚀">🚀 رائد فضاء</option>
+              <option value="🦄">🦄 وحيد القرن</option>
+              <option value="🦖">🦖 ديناصور لطيف</option>
+              <option value=" princess">👑 أميرة النجوم</option>
+            </select>
+          </div>
+          <button class="btn btn-parent btn-block" onclick="handleAddChild()">إضافة الطفل وربطه بالحساب</button>
+        </div>
+
+        <div class="card">
+          <h4 style="margin-top:0;">📝 إدارة المهام اليومية (إضافة / حذف)</h4>
+          <div class="form-group">
+            <label>عنوان المهمة الجديدة</label>
+            <input type="text" id="newTaskTitle" class="form-control" placeholder="مثال: ترتيب السرير صباحاً" />
+          </div>
+          <div class="form-group">
+            <label>عدد النقاط</label>
+            <input type="number" id="newTaskPoints" class="form-control" placeholder="مثال: 30" />
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="newTaskRepeatable" /> يمكن إرسالها أكثر من مرة في اليوم الواحد</label>
+          </div>
+          <button class="btn btn-secondary btn-block" onclick="handleAddTask()">إضافة مهمة للقائمة</button>
+          <div id="parentTasksManageList" style="margin-top:14px;"></div>
+        </div>
+      </div>
+
+      <!-- طلبات إنجاز المهام -->
+      <div id="parentTab-tasks" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">✅ طلبات إنجاز المهام</h3>
+          <div id="pendingTasksList">لا توجد طلبات معلقة حالياً.</div>
+        </div>
+      </div>
+
+      <!-- طلبات سحب الأموال -->
+      <div id="parentTab-withdraws" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">💸 طلبات سحب الأموال</h3>
+          <div id="pendingWithdrawsList">لا توجد طلبات سحب معلقة حالياً.</div>
+        </div>
+      </div>
+
+      <!-- إعدادات الأبوين -->
+      <div id="parentTab-settings" class="hidden">
+        <div class="card">
+          <h3 style="margin-top:0;">⚙️ إعدادات حساب الأبوين</h3>
+          <div class="form-group">
+            <label>اسم المستخدم الجديد</label>
+            <input type="text" id="parentNewUser" class="form-control" />
+          </div>
+          <div class="form-group">
+            <label>كلمة المرور الجديدة</label>
+            <input type="password" id="parentNewPass" class="form-control" />
+          </div>
+          <button class="btn btn-parent btn-block" onclick="handleUpdateCredentials('parent')">حفظ بيانات الدخول</button>
+        </div>
+      </div>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn active parent-nav" data-ptab="home" onclick="switchParentTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
+        <button class="nav-btn parent-nav" data-ptab="tasks" onclick="switchParentTab('tasks')"><span class="nav-icon">📋</span>طلبات المهام</button>
+        <button class="nav-btn parent-nav" data-ptab="withdraws" onclick="switchParentTab('withdraws')"><span class="nav-icon">💰</span>طلبات السحب</button>
+        <button class="nav-btn parent-nav" data-ptab="settings" onclick="switchParentTab('settings')"><span class="nav-icon">⚙️</span>الإعدادات</button>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ ضع رابط Web App URL الخاص بك من Google Apps Script هنا:
+    const API_URL = "https://script.google.com/macros/s/AKfycbx1RZk1XN4zrHB3XjcqQXFBSgz2Bogbc05Bka6QLftH-PPjafQH6qfR-dqH4_yhwu0z/exec";
+
+    let selectedRole = null;
+    let currentUser = null;
+    let childDataCache = null;
+
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.remove("hidden");
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => el.classList.add("hidden"), 3200);
+    }
+
+    async function callApi(payload) {
+      if (!API_URL || API_URL.includes("ضع_رابط_WEB_APP_URL_هنا")) {
+        showToast("يرجى وضع رابط Web App URL أولاً في الكود");
+        return { success: false, message: "API_URL غير مهيأ" };
+      }
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      return await res.json();
+    }
+
+    function openLogin(role) {
+      selectedRole = role;
+      document.getElementById("gateScreen").classList.add("hidden");
+      document.getElementById("loginScreen").classList.remove("hidden");
+      document.getElementById("loginUsername").value = "";
+      document.getElementById("loginPassword").value = "";
+
+      if (role === "child") {
+        document.body.classList.remove("parent-mode");
+        document.getElementById("loginRoleBadge").textContent = "حساب الطفل 🦁";
+        document.getElementById("loginHeading").textContent = "دخول البطل الصغير";
+        document.getElementById("parentRegisterBox").classList.add("hidden");
+      } else {
+        document.body.classList.add("parent-mode");
+        document.getElementById("loginRoleBadge").textContent = "حساب الأبوين 👨‍👩‍👧‍👦";
+        document.getElementById("loginHeading").textContent = "دخول الأبوين";
+        document.getElementById("parentRegisterBox").classList.remove("hidden");
+      }
+    }
+
+    function backToGate() {
+      document.body.classList.remove("parent-mode");
+      document.getElementById("loginScreen").classList.add("hidden");
+      document.getElementById("gateScreen").classList.remove("hidden");
+    }
+
+    function logout() {
+      currentUser = null;
+      childDataCache = null;
+      document.getElementById("childApp").classList.add("hidden");
+      document.getElementById("parentApp").classList.add("hidden");
+      backToGate();
+    }
+
+    async function handleLogin() {
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value.trim();
+      if (!username || !password) return showToast("أدخل اسم المستخدم وكلمة المرور");
+
+      const btn = document.getElementById("loginSubmitBtn");
+      btn.disabled = true;
+      btn.textContent = "جاري الدخول...";
+
+      try {
+        const res = await callApi({ action: "login", role: selectedRole, username, password });
+        if (!res.success) return showToast(res.message || "بيانات الدخول غير صحيحة");
+
+        currentUser = res.user;
+        document.getElementById("loginScreen").classList.add("hidden");
+
+        if (selectedRole === "child") {
+          document.getElementById("childApp").classList.remove("hidden");
+          document.getElementById("childNewUser").value = currentUser.username;
+          switchChildTab("home");
+          await refreshChildDashboard();
+        } else {
+          document.getElementById("parentApp").classList.remove("hidden");
+          document.getElementById("parentNameDisplay").textContent = currentUser.username;
+          document.getElementById("parentFamilyCode").textContent = currentUser.familyCode || "";
+          document.getElementById("parentNewUser").value = currentUser.username;
+          switchParentTab("home");
+          await refreshParentDashboard();
+        }
+      } catch (e) {
+        showToast("تعذر الاتصال بالخادم، تحقق من رابط API");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "دخول";
+      }
+    }
+
+    async function handleRegisterParent() {
+      const username = document.getElementById("regParentUser").value.trim();
+      const password = document.getElementById("regParentPass").value.trim();
+      if (!username || !password) return showToast("أدخل اسم مستخدم وكلمة مرور جديدة");
+
+      const res = await callApi({ action: "registerParent", username, password });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("loginUsername").value = username;
+        document.getElementById("loginPassword").value = password;
+        document.getElementById("regParentUser").value = "";
+        document.getElementById("regParentPass").value = "";
+      }
+    }
+
+    // --- وظائف حساب الطفل ---
+    function switchChildTab(tab) {
+      ["home", "tasks", "convert", "withdraw", "history", "settings"].forEach(t => {
+        document.getElementById("childTab-" + t).classList.toggle("hidden", t !== tab);
+      });
+      document.querySelectorAll(".child-nav").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.ctab === tab);
+      });
+      if (currentUser && ["home", "tasks", "history"].includes(tab)) {
+        refreshChildDashboard();
+      }
+    }
+
+    async function refreshChildDashboard() {
+      const res = await callApi({ action: "getChildDashboard", childId: currentUser.id });
+      if (!res.success) return;
+
+      childDataCache = res;
+      const c = res.child;
+      document.getElementById("childNameDisplay").textContent = c.name;
+      document.getElementById("childAvatar").textContent = c.avatar || "🦁";
+      document.getElementById("childPointsVal").textContent = c.points;
+      document.getElementById("childBalanceVal").textContent = Number(c.balance).toLocaleString() + " د.ع";
+      document.getElementById("convertAvailablePts").textContent = c.points;
+      document.getElementById("withdrawAvailableBal").textContent = Number(c.balance).toLocaleString();
+
+      renderChildTasks(res.tasks, res.todayStatus);
+      renderChildTransactions(res.transactions);
+    }
+
+    function renderChildTasks(tasks, todayStatus) {
+      const container = document.getElementById("childTasksList");
+      if (!tasks || !tasks.length) {
+        container.innerHTML = "<p>لا توجد مهام متاحة حالياً.</p>";
+        return;
+      }
+
+      container.innerHTML = tasks.map(t => {
+        const doneToday = todayStatus && todayStatus[t.id];
+        const isLocked = !t.repeatable && !!doneToday;
+        let btnLabel = "إنجاز";
+        if (isLocked) {
+          btnLabel = doneToday === "Approved" ? "تم الإنجاز ✅" : "قيد المراجعة ⏳";
+        }
+
+        return `
+          <div class="task-item">
+            <div class="task-header">
+              <div class="task-title">${t.title}</div>
+              <span class="points-badge">+${t.points} نقطة</span>
+            </div>
+            <div class="task-footer">
+              <span class="${t.repeatable ? "tag-repeat" : "tag-once"}">
+                ${t.repeatable ? "قابلة للتكرار في اليوم" : "مرة واحدة يومياً"}
+              </span>
+              <button class="btn btn-primary" ${isLocked ? "disabled" : ""} onclick="submitTaskRequest('${t.id}')">
+                ${btnLabel}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function submitTaskRequest(taskId) {
+      const res = await callApi({
+        action: "submitTask",
+        childId: currentUser.id,
+        childName: currentUser.name,
+        taskId
+      });
+      showToast(res.message);
+      if (res.success) await refreshChildDashboard();
+    }
+
+    function fillAllPoints() {
+      if (!childDataCache) return;
+      document.getElementById("convertPointsInput").value = childDataCache.child.points;
+      updateConvertPreview();
+    }
+
+    function updateConvertPreview() {
+      const pts = Number(document.getElementById("convertPointsInput").value || 0);
+      const iqd = pts >= 200 ? Math.floor((pts / 100) * 250) : 0;
+      document.getElementById("convertPreview").textContent = `المبلغ الناتج: ${iqd.toLocaleString()} دينار عراقي`;
+    }
+
+    async function handleConvertPoints() {
+      const pts = Number(document.getElementById("convertPointsInput").value);
+      if (!pts || pts < 200) return showToast("أقل عدد للتحويل هو 200 نقطة");
+
+      const res = await callApi({ action: "convertPoints", childId: currentUser.id, points: pts });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("convertPointsInput").value = "";
+        updateConvertPreview();
+        await refreshChildDashboard();
+      }
+    }
+
+    function fillAllBalance() {
+      if (!childDataCache) return;
+      document.getElementById("withdrawAmountInput").value = childDataCache.child.balance;
+    }
+
+    async function handleWithdrawRequest() {
+      const amount = Number(document.getElementById("withdrawAmountInput").value);
+      if (!amount || amount < 1000) return showToast("أقل مبلغ للسحب هو 1000 دينار عراقي");
+
+      const res = await callApi({ action: "requestWithdraw", childId: currentUser.id, amount });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("withdrawAmountInput").value = "";
+        await refreshChildDashboard();
+      }
+    }
+
+    function renderChildTransactions(list) {
+      const container = document.getElementById("childTransactionsList");
+      if (!list || !list.length) {
+        container.innerHTML = "<p style='color:#64748b;'>لا توجد حركات مسجلة حتى الآن.</p>";
+        return;
+      }
+
+      container.innerHTML = list.map(tr => `
+        <div class="task-item">
+          <div class="task-header">
+            <div>
+              <b>${tr.type}</b>
+              <div style="font-size:13px; color:#475569;">${tr.details}</div>
+              <div style="font-size:11px; color:#94a3b8;">${tr.date}</div>
+            </div>
+            <span class="status-pill status-${tr.status}">${tr.status}</span>
+          </div>
+          <div style="font-size:13px; font-weight:700;">
+            ${tr.pointsChange !== 0 ? `النقاط: ${tr.pointsChange > 0 ? "+" : ""}${tr.pointsChange}` : ""}
+            ${tr.iqdChange !== 0 ? ` | المبلغ: ${tr.iqdChange > 0 ? "+" : ""}${tr.iqdChange.toLocaleString()} د.ع` : ""}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // --- وظائف حساب الأبوين ---
+    function switchParentTab(tab) {
+      ["home", "tasks", "withdraws", "settings"].forEach(t => {
+        document.getElementById("parentTab-" + t).classList.toggle("hidden", t !== tab);
+      });
+      document.querySelectorAll(".parent-nav").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.ptab === tab);
+      });
+      if (currentUser && tab !== "settings") {
+        refreshParentDashboard();
+      }
+    }
+
+    async function refreshParentDashboard() {
+      const res = await callApi({ action: "getParentDashboard", parentId: currentUser.id });
+      if (!res.success) return;
+
+      renderParentChildren(res.children);
+      renderPendingTasks(res.pendingTasks);
+      renderPendingWithdraws(res.pendingWithdraws);
+      renderParentTasksManage(res.allTasks);
+    }
+
+    function renderParentChildren(children) {
+      const box = document.getElementById("parentChildrenSummary");
+      if (!children || !children.length) {
+        box.innerHTML = "<p style='color:#64748b;'>لم تقم بإضافة أي طفل بعد. أضف طفلك من النموذج بالأسفل.</p>";
+        return;
+      }
+      box.innerHTML = children.map(ch => `
+        <div class="task-item">
+          <div class="task-header">
+            <div>
+              <b>${ch.avatar || "🦁"} ${ch.name}</b> <span style="font-size:12px; color:#64748b;">(@${ch.username})</span>
+            </div>
+            <span class="points-badge">${ch.points} نقطة</span>
+          </div>
+          <div style="font-size:14px; font-weight:700; color:#0369a1;">
+            الرصيد المالي: ${Number(ch.balance).toLocaleString()} دينار عراقي
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function handleAddChild() {
+      const name = document.getElementById("newChildName").value.trim();
+      const username = document.getElementById("newChildUser").value.trim();
+      const password = document.getElementById("newChildPass").value.trim();
+      const avatar = document.getElementById("newChildAvatar").value;
+      if (!name || !username || !password) return showToast("يرجى تعبئة جميع حقول الطفل");
+
+      const res = await callApi({
+        action: "addChild",
+        parentId: currentUser.id,
+        name, username, password, avatar
+      });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("newChildName").value = "";
+        document.getElementById("newChildUser").value = "";
+        document.getElementById("newChildPass").value = "";
+        await refreshParentDashboard();
+      }
+    }
+
+    function renderPendingTasks(requests) {
+      const box = document.getElementById("pendingTasksList");
+      if (!requests || !requests.length) {
+        box.innerHTML = "<p style='color:#64748b;'>لا توجد طلبات إنجاز مهام بانتظار الموافقة.</p>";
+        return;
+      }
+      box.innerHTML = requests.map(r => `
+        <div class="task-item">
+          <div class="task-header">
+            <div>
+              <b>الطفل: ${r.childName}</b>
+              <div style="font-size:14px;">${r.taskTitle}</div>
+              <div style="font-size:12px; color:#64748b;">التاريخ: ${r.date}</div>
+            </div>
+            <span class="points-badge">+${r.points} نقطة</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-success" style="flex:1;" onclick="reviewTaskReq('${r.reqId}', 'Approved')">موافقة</button>
+            <button class="btn btn-danger" style="flex:1;" onclick="reviewTaskReq('${r.reqId}', 'Rejected')">رفض</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function reviewTaskReq(reqId, decision) {
+      const res = await callApi({ action: "reviewTask", reqId, decision });
+      showToast(res.message);
+      if (res.success) await refreshParentDashboard();
+    }
+
+    function renderPendingWithdraws(list) {
+      const box = document.getElementById("pendingWithdrawsList");
+      if (!list || !list.length) {
+        box.innerHTML = "<p style='color:#64748b;'>لا توجد طلبات سحب أموال معلقة.</p>";
+        return;
+      }
+      box.innerHTML = list.map(w => `
+        <div class="task-item">
+          <div class="task-header">
+            <div>
+              <b>الطفل: ${w.childName}</b>
+              <div style="font-size:15px; font-weight:800; color:#0369a1;">المبلغ المطلوب: ${Number(w.amount).toLocaleString()} دينار</div>
+              <div style="font-size:12px; color:#64748b;">التاريخ: ${w.date}</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-success" style="flex:1;" onclick="reviewWithdrawReq('${w.transId}', 'Approved')">موافقة وخصم</button>
+            <button class="btn btn-danger" style="flex:1;" onclick="reviewWithdrawReq('${w.transId}', 'Rejected')">رفض</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function reviewWithdrawReq(transId, decision) {
+      const res = await callApi({ action: "reviewWithdraw", transId, decision });
+      showToast(res.message);
+      if (res.success) await refreshParentDashboard();
+    }
+
+    async function handleAddTask() {
+      const title = document.getElementById("newTaskTitle").value.trim();
+      const points = Number(document.getElementById("newTaskPoints").value);
+      const repeatable = document.getElementById("newTaskRepeatable").checked;
+      if (!title || !points) return showToast("أدخل عنوان المهمة وعدد النقاط");
+
+      const res = await callApi({
+        action: "manageTaskMaster",
+        subAction: "add",
+        title, points, repeatable
+      });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("newTaskTitle").value = "";
+        document.getElementById("newTaskPoints").value = "";
+        document.getElementById("newTaskRepeatable").checked = false;
+        await refreshParentDashboard();
+      }
+    }
+
+    function renderParentTasksManage(tasks) {
+      const box = document.getElementById("parentTasksManageList");
+      if (!tasks || !tasks.length) return;
+      box.innerHTML = tasks.map(t => `
+        <div class="task-item" style="padding:10px;">
+          <div class="task-header">
+            <span style="font-size:13px; font-weight:700;">${t.title} (${t.points} نقطة)</span>
+            <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteTaskItem('${t.id}')">حذف</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function deleteTaskItem(taskId) {
+      const res = await callApi({ action: "manageTaskMaster", subAction: "delete", taskId });
+      showToast(res.message);
+      if (res.success) await refreshParentDashboard();
+    }
+
+    async function handleUpdateCredentials(role) {
+      const newUsername = document.getElementById(role + "NewUser").value.trim();
+      const newPassword = document.getElementById(role + "NewPass").value.trim();
+      if (!newUsername || !newPassword) return showToast("أدخل اسم المستخدم وكلمة المرور الجديدة");
+
+      const res = await callApi({
+        action: "updateCredentials",
+        role,
+        userId: currentUser.id,
+        newUsername,
+        newPassword
+      });
+      showToast(res.message);
+      if (res.success) {
+        currentUser.username = newUsername;
+        document.getElementById(role + "NewPass").value = "";
+      }
+    }
+  </script>
+</body>
+</html>
