@@ -355,6 +355,28 @@
       font-weight: 600;
     }
 
+    .preset-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .preset-chip {
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      color: #0f766e;
+      border-radius: 999px;
+      padding: 5px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .preset-chip:active {
+      transform: scale(0.96);
+    }
+
     /* شريط التنقل السفلي */
     .bottom-nav {
       position: fixed;
@@ -572,10 +594,14 @@
       <div id="childTab-convert" class="hidden">
         <div class="card">
           <h3 style="margin-top:0;">🔄 تحويل النقاط إلى رصيد مالي</h3>
-          <p style="font-size:13px; color:#64748b;">نقاطك الحالية: <b id="convertAvailablePts">0</b> نقطة | الحد الأدنى: <b>200 نقطة</b> (كل 100 نقطة = 250 دينار)</p>
+          <p style="font-size:13px; color:#64748b;">نقاطك الحالية: <b id="convertAvailablePts">0</b> نقطة | الحد الأدنى: <b>200 نقطة</b> (كل 100 نقطة = 250 دينار)
+
+</p>
           <div class="form-group">
             <label>عدد النقاط المراد تحويلها</label>
-            <input type="number" id="convertPointsInput" class="form-control" min="200" step="10" placeholder="مثال: 200 أو جميع نقاطك" oninput="updateConvertPreview()" />
+            <input type="number" id="convertPointsInput" class="form-control" min="200" step="10" placeholder="مثال: 200 أو جميع نقاطك" 
+
+oninput="updateConvertPreview()" />
           </div>
           <div style="display:flex; gap:8px; margin-bottom:10px;">
             <button class="btn btn-ghost" style="flex:1;" onclick="fillAllPoints()">تحويل جميع النقاط</button>
@@ -609,30 +635,21 @@
         </div>
       </div>
 
-      <!-- تبويب الإعدادات (الطفل) -->
-      <div id="childTab-settings" class="hidden">
-        <div class="card">
-          <h3 style="margin-top:0;">⚙️ إعدادات حساب الطفل</h3>
-          <div class="form-group">
-            <label>اسم المستخدم الجديد</label>
-            <input type="text" id="childNewUser" class="form-control" />
-          </div>
-          <div class="form-group">
-            <label>كلمة المرور الجديدة</label>
-            <input type="password" id="childNewPass" class="form-control" />
-          </div>
-          <button class="btn btn-primary btn-block" onclick="handleUpdateCredentials('child')">حفظ التغييرات</button>
-        </div>
-      </div>
-
       <!-- شريط التنقل السفلي للطفل -->
       <nav class="bottom-nav">
-        <button class="nav-btn active child-nav" data-ctab="home" onclick="switchChildTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
+        <button class="nav-btn active child-nav" data-ctab="home" onclick="switchChildTab('home')"><span class="nav-icon">🏠</span>
+
+الرئيسية</button>
         <button class="nav-btn child-nav" data-ctab="tasks" onclick="switchChildTab('tasks')"><span class="nav-icon">⭐</span>المهام</button>
-        <button class="nav-btn child-nav" data-ctab="convert" onclick="switchChildTab('convert')"><span class="nav-icon">🔄</span>تحويل</button>
-        <button class="nav-btn child-nav" data-ctab="withdraw" onclick="switchChildTab('withdraw')"><span class="nav-icon">💵</span>سحب</button>
-        <button class="nav-btn child-nav" data-ctab="history" onclick="switchChildTab('history')"><span class="nav-icon">📜</span>الحركات</button>
-        <button class="nav-btn child-nav" data-ctab="settings" onclick="switchChildTab('settings')"><span class="nav-icon">⚙️</span>الإعدادات</button>
+        <button class="nav-btn child-nav" data-ctab="convert" onclick="switchChildTab('convert')"><span class="nav-icon">🔄</span>
+
+تحويل</button>
+        <button class="nav-btn child-nav" data-ctab="withdraw" onclick="switchChildTab('withdraw')"><span class="nav-icon">💵</span>
+
+سحب</button>
+        <button class="nav-btn child-nav" data-ctab="history" onclick="switchChildTab('history')"><span class="nav-icon">📜</span>
+
+الحركات</button>
       </nav>
     </div>
 
@@ -652,7 +669,7 @@
         <div class="card">
           <h3 style="margin-top:0;">📊 نظرة عامة على العائلة</h3>
           <p style="font-size:14px; color:#475569; margin-top:0;">
-            من هنا يمكنك متابعة نقاط وأرصدة الأطفال، إضافة طفل جديد، وإدارة قائمة المهام اليومية.
+            من هنا يمكنك متابعة نقاط وأرصدة الأطفال، إضافة طفل جديد، وإدارة مهام العائلة.
           </p>
           <div id="parentChildrenSummary">جاري التحميل...</div>
         </div>
@@ -678,17 +695,31 @@
               <option value="🚀">🚀 رائد فضاء</option>
               <option value="🦄">🦄 وحيد القرن</option>
               <option value="🦖">🦖 ديناصور لطيف</option>
-              <option value=" princess">👑 أميرة النجوم</option>
+              <option value="👑">👑 أميرة النجوم</option>
             </select>
           </div>
           <button class="btn btn-parent btn-block" onclick="handleAddChild()">إضافة الطفل وربطه بالحساب</button>
         </div>
 
         <div class="card">
-          <h4 style="margin-top:0;">📝 إدارة المهام اليومية (إضافة / حذف)</h4>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="margin:0;" id="taskFormHeading">📝 إضافة مهام العائلة</h4>
+            <span class="points-badge" id="familyTasksCounter">0 / 10</span>
+          </div>
+          <p style="font-size:12px; color:#64748b; margin-top:0;">اقتراحات سريعة للتعبئة (يمكنك تعديلها قبل الحفظ):</p>
+          <div class="preset-chips">
+            <button type="button" class="preset-chip" onclick="fillPresetTask('إنجاز الواجب المنزلي بالكامل قبل العاشرة مساءً', 150, false)">+ الواجب المنزلي (150)
+
+</button>
+            <button type="button" class="preset-chip" onclick="fillPresetTask('سماع كلام الأهل والالتزام بالتوجيهات', 30, false)">+ سماع كلام الأهل (30)</button>
+            <button type="button" class="preset-chip" onclick="fillPresetTask('إنجاز عمل بسيط يكلف به', 20, true)">+ عمل بسيط (20 🔁)</button>
+            <button type="button" class="preset-chip" onclick="fillPresetTask('الحصول على علامة كاملة في الامتحان اليومي', 50, true)">+ امتحان يومي (50 🔁)</button>
+          </div>
+
+          <input type="hidden" id="editingTaskId" value="" />
           <div class="form-group">
-            <label>عنوان المهمة الجديدة</label>
-            <input type="text" id="newTaskTitle" class="form-control" placeholder="مثال: ترتيب السرير صباحاً" />
+            <label>عنوان المهمة</label>
+            <input type="text" id="newTaskTitle" class="form-control" placeholder="اكتب عنوان المهمة هنا" />
           </div>
           <div class="form-group">
             <label>عدد النقاط</label>
@@ -697,7 +728,10 @@
           <div class="form-group">
             <label><input type="checkbox" id="newTaskRepeatable" /> يمكن إرسالها أكثر من مرة في اليوم الواحد</label>
           </div>
-          <button class="btn btn-secondary btn-block" onclick="handleAddTask()">إضافة مهمة للقائمة</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-secondary" style="flex:1;" id="saveTaskBtn" onclick="handleSaveTask()">إضافة المهمة</button>
+            <button class="btn btn-ghost hidden" id="cancelEditTaskBtn" onclick="cancelEditTask()">إلغاء التعديل</button>
+          </div>
           <div id="parentTasksManageList" style="margin-top:14px;"></div>
         </div>
       </div>
@@ -718,7 +752,7 @@
         </div>
       </div>
 
-      <!-- إعدادات الأبوين -->
+      <!-- إعدادات الأبوين والأطفال -->
       <div id="parentTab-settings" class="hidden">
         <div class="card">
           <h3 style="margin-top:0;">⚙️ إعدادات حساب الأبوين</h3>
@@ -732,13 +766,55 @@
           </div>
           <button class="btn btn-parent btn-block" onclick="handleUpdateCredentials('parent')">حفظ بيانات الدخول</button>
         </div>
+
+        <div class="card">
+          <h3 style="margin-top:0;">🧒 تعديل بيانات وحسابات الأطفال</h3>
+          <div id="editChildEmptyMsg" style="color:#64748b; font-size:13px;">لا يوجد أطفال مسجلون حالياً.</div>
+          <div id="editChildFormContainer" class="hidden">
+            <div class="form-group">
+              <label>اختر الطفل</label>
+              <select id="editChildSelect" class="form-control" onchange="populateChildEditForm()"></select>
+            </div>
+            <div class="form-group">
+              <label>اسم الطفل</label>
+              <input type="text" id="editChildName" class="form-control" placeholder="اسم الطفل" />
+            </div>
+            <div class="form-group">
+              <label>رمز الطفل (Avatar)</label>
+              <select id="editChildAvatar" class="form-control">
+                <option value="🦁">🦁 أسد شجاع</option>
+                <option value="🚀">🚀 رائد فضاء</option>
+                <option value="🦄">🦄 وحيد القرن</option>
+                <option value="🦖">🦖 ديناصور لطيف</option>
+                <option value="👑">👑 أميرة النجوم</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>اسم المستخدم للطفل</label>
+              <input type="text" id="editChildUsername" class="form-control" placeholder="اسم المستخدم" />
+            </div>
+            <div class="form-group">
+              <label>كلمة المرور الجديدة (اتركها فارغة للإبقاء على الحالية)</label>
+              <input type="text" id="editChildPassword" class="form-control" placeholder="أدخل كلمة مرور جديدة أو اتركها فارغة" />
+            </div>
+            <button class="btn btn-secondary btn-block" onclick="handleUpdateChildProfile()">حفظ بيانات الطفل</button>
+          </div>
+        </div>
       </div>
 
       <nav class="bottom-nav">
-        <button class="nav-btn active parent-nav" data-ptab="home" onclick="switchParentTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
-        <button class="nav-btn parent-nav" data-ptab="tasks" onclick="switchParentTab('tasks')"><span class="nav-icon">📋</span>طلبات المهام</button>
-        <button class="nav-btn parent-nav" data-ptab="withdraws" onclick="switchParentTab('withdraws')"><span class="nav-icon">💰</span>طلبات السحب</button>
-        <button class="nav-btn parent-nav" data-ptab="settings" onclick="switchParentTab('settings')"><span class="nav-icon">⚙️</span>الإعدادات</button>
+        <button class="nav-btn active parent-nav" data-ptab="home" onclick="switchParentTab('home')"><span class="nav-icon">🏠</span>
+
+الرئيسية</button>
+        <button class="nav-btn parent-nav" data-ptab="tasks" onclick="switchParentTab('tasks')"><span class="nav-icon">📋</span>طلبات 
+
+المهام</button>
+        <button class="nav-btn parent-nav" data-ptab="withdraws" onclick="switchParentTab('withdraws')"><span class="nav-icon">💰</span>
+
+طلبات السحب</button>
+        <button class="nav-btn parent-nav" data-ptab="settings" onclick="switchParentTab('settings')"><span class="nav-icon">⚙️</span>
+
+الإعدادات</button>
       </nav>
     </div>
   </div>
@@ -750,6 +826,8 @@
     let selectedRole = null;
     let currentUser = null;
     let childDataCache = null;
+    let parentTasksCache = [];
+    let parentChildrenCache = [];
 
     function showToast(msg) {
       const el = document.getElementById("toast");
@@ -801,6 +879,9 @@
     function logout() {
       currentUser = null;
       childDataCache = null;
+      parentTasksCache = [];
+      parentChildrenCache = [];
+      cancelEditTask();
       document.getElementById("childApp").classList.add("hidden");
       document.getElementById("parentApp").classList.add("hidden");
       backToGate();
@@ -824,7 +905,6 @@
 
         if (selectedRole === "child") {
           document.getElementById("childApp").classList.remove("hidden");
-          document.getElementById("childNewUser").value = currentUser.username;
           switchChildTab("home");
           await refreshChildDashboard();
         } else {
@@ -860,7 +940,7 @@
 
     // --- وظائف حساب الطفل ---
     function switchChildTab(tab) {
-      ["home", "tasks", "convert", "withdraw", "history", "settings"].forEach(t => {
+      ["home", "tasks", "convert", "withdraw", "history"].forEach(t => {
         document.getElementById("childTab-" + t).classList.toggle("hidden", t !== tab);
       });
       document.querySelectorAll(".child-nav").forEach(btn => {
@@ -891,7 +971,7 @@
     function renderChildTasks(tasks, todayStatus) {
       const container = document.getElementById("childTasksList");
       if (!tasks || !tasks.length) {
-        container.innerHTML = "<p>لا توجد مهام متاحة حالياً.</p>";
+        container.innerHTML = "<p style='color:#64748b;'>لم يقم الأبوان بإضافة مهام بعد.</p>";
         return;
       }
 
@@ -1008,7 +1088,7 @@
       document.querySelectorAll(".parent-nav").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.ptab === tab);
       });
-      if (currentUser && tab !== "settings") {
+      if (currentUser) {
         refreshParentDashboard();
       }
     }
@@ -1017,7 +1097,11 @@
       const res = await callApi({ action: "getParentDashboard", parentId: currentUser.id });
       if (!res.success) return;
 
+      parentTasksCache = res.allTasks || [];
+      parentChildrenCache = res.children || [];
+      document.getElementById("familyTasksCounter").textContent = `${res.familyTasksCount || 0} / ${res.maxFamilyTasks || 10}`;
       renderParentChildren(res.children);
+      renderParentChildEditor(res.children);
       renderPendingTasks(res.pendingTasks);
       renderPendingWithdraws(res.pendingWithdraws);
       renderParentTasksManage(res.allTasks);
@@ -1042,6 +1126,72 @@
           </div>
         </div>
       `).join("");
+    }
+
+    function renderParentChildEditor(children) {
+      const emptyMsg = document.getElementById("editChildEmptyMsg");
+      const container = document.getElementById("editChildFormContainer");
+      const select = document.getElementById("editChildSelect");
+
+      if (!children || !children.length) {
+        emptyMsg.classList.remove("hidden");
+        container.classList.add("hidden");
+        return;
+      }
+
+      emptyMsg.classList.add("hidden");
+      container.classList.remove("hidden");
+
+      const prevSelected = select.value;
+      select.innerHTML = children.map(ch =>
+        `<option value="${ch.id}">${ch.avatar || "🦁"} ${ch.name} (@${ch.username})</option>`
+      ).join("");
+
+      if (prevSelected && children.some(ch => ch.id === prevSelected)) {
+        select.value = prevSelected;
+      }
+      populateChildEditForm();
+    }
+
+    function populateChildEditForm() {
+      const selectedId = document.getElementById("editChildSelect").value;
+      const child = parentChildrenCache.find(ch => ch.id === selectedId);
+      if (!child) return;
+
+      document.getElementById("editChildName").value = child.name || "";
+      document.getElementById("editChildUsername").value = child.username || "";
+      document.getElementById("editChildPassword").value = "";
+
+      const avatarSelect = document.getElementById("editChildAvatar");
+      const knownAvatars = Array.from(avatarSelect.options).map(o => o.value);
+      avatarSelect.value = knownAvatars.includes(child.avatar) ? child.avatar : "🦁";
+    }
+
+    async function handleUpdateChildProfile() {
+      const childId = document.getElementById("editChildSelect").value;
+      const newName = document.getElementById("editChildName").value.trim();
+      const newAvatar = document.getElementById("editChildAvatar").value;
+      const newUsername = document.getElementById("editChildUsername").value.trim();
+      const newPassword = document.getElementById("editChildPassword").value.trim();
+
+      if (!childId || !newName || !newUsername) {
+        return showToast("يرجى إدخال اسم الطفل واسم المستخدم");
+      }
+
+      const res = await callApi({
+        action: "updateChildProfile",
+        parentId: currentUser.id,
+        childId,
+        newName,
+        newAvatar,
+        newUsername,
+        newPassword
+      });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("editChildPassword").value = "";
+        await refreshParentDashboard();
+      }
     }
 
     async function handleAddChild() {
@@ -1124,41 +1274,94 @@
       if (res.success) await refreshParentDashboard();
     }
 
-    async function handleAddTask() {
+    function fillPresetTask(title, points, repeatable) {
+      cancelEditTask();
+      document.getElementById("newTaskTitle").value = title;
+      document.getElementById("newTaskPoints").value = points;
+      document.getElementById("newTaskRepeatable").checked = repeatable;
+    }
+
+    function startEditTask(taskId) {
+      const task = parentTasksCache.find(t => t.id === taskId);
+      if (!task || task.isFixed) return;
+
+      document.getElementById("editingTaskId").value = task.id;
+      document.getElementById("newTaskTitle").value = task.title;
+      document.getElementById("newTaskPoints").value = task.points;
+      document.getElementById("newTaskRepeatable").checked = !!task.repeatable;
+
+      document.getElementById("taskFormHeading").textContent = "✏️ تعديل المهمة";
+      document.getElementById("saveTaskBtn").textContent = "حفظ التعديلات";
+      document.getElementById("cancelEditTaskBtn").classList.remove("hidden");
+      document.getElementById("newTaskTitle").focus();
+    }
+
+    function cancelEditTask() {
+      document.getElementById("editingTaskId").value = "";
+      document.getElementById("newTaskTitle").value = "";
+      document.getElementById("newTaskPoints").value = "";
+      document.getElementById("newTaskRepeatable").checked = false;
+
+      document.getElementById("taskFormHeading").textContent = "📝 إضافة مهام العائلة";
+      document.getElementById("saveTaskBtn").textContent = "إضافة المهمة";
+      document.getElementById("cancelEditTaskBtn").classList.add("hidden");
+    }
+
+    async function handleSaveTask() {
+      const editingId = document.getElementById("editingTaskId").value.trim();
       const title = document.getElementById("newTaskTitle").value.trim();
       const points = Number(document.getElementById("newTaskPoints").value);
       const repeatable = document.getElementById("newTaskRepeatable").checked;
       if (!title || !points) return showToast("أدخل عنوان المهمة وعدد النقاط");
 
-      const res = await callApi({
-        action: "manageTaskMaster",
-        subAction: "add",
-        title, points, repeatable
-      });
+      const payload = editingId
+        ? { action: "manageTaskMaster", subAction: "edit", parentId: currentUser.id, taskId: editingId, title, points, repeatable }
+        : { action: "manageTaskMaster", subAction: "add", parentId: currentUser.id, title, points, repeatable };
+
+      const res = await callApi(payload);
       showToast(res.message);
       if (res.success) {
-        document.getElementById("newTaskTitle").value = "";
-        document.getElementById("newTaskPoints").value = "";
-        document.getElementById("newTaskRepeatable").checked = false;
+        cancelEditTask();
         await refreshParentDashboard();
       }
     }
 
     function renderParentTasksManage(tasks) {
       const box = document.getElementById("parentTasksManageList");
-      if (!tasks || !tasks.length) return;
+      if (!tasks || !tasks.length) {
+        box.innerHTML = "<p style='font-size:13px; color:#64748b;'>لم تقم بإضافة أي مهام لعائلتك بعد.</p>";
+        return;
+      }
       box.innerHTML = tasks.map(t => `
         <div class="task-item" style="padding:10px;">
           <div class="task-header">
-            <span style="font-size:13px; font-weight:700;">${t.title} (${t.points} نقطة)</span>
-            <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteTaskItem('${t.id}')">حذف</button>
+            <div>
+              <div style="font-size:13px; font-weight:700;">${t.title} (${t.points} نقطة)</div>
+              <span class="${t.repeatable ? "tag-repeat" : "tag-once"}" style="font-size:11px;">
+                ${t.repeatable ? "أكثر من مرة باليوم" : "مرة واحدة باليوم"}
+              </span>
+            </div>
+            ${t.isFixed
+              ? `<span class="tag-once">مهمة عامة من الإدارة</span>`
+              : `<div style="display:flex; gap:6px;">
+                  <button class="btn btn-secondary" style="padding:5px 10px; font-size:12px;" onclick="startEditTask('${t.id}')">
+
+تعديل</button>
+                  <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteTaskItem('${t.id}')">
+
+حذف</button>
+                 </div>`
+            }
           </div>
         </div>
       `).join("");
     }
 
     async function deleteTaskItem(taskId) {
-      const res = await callApi({ action: "manageTaskMaster", subAction: "delete", taskId });
+      if (document.getElementById("editingTaskId").value === taskId) {
+        cancelEditTask();
+      }
+      const res = await callApi({ action: "manageTaskMaster", subAction: "delete", parentId: currentUser.id, taskId });
       showToast(res.message);
       if (res.success) await refreshParentDashboard();
     }
