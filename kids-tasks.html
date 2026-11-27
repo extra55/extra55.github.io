@@ -222,6 +222,12 @@
       color: #fff;
     }
 
+    .btn-whatsapp {
+      background: #25d366;
+      color: #fff;
+      text-decoration: none;
+    }
+
     .btn-ghost {
       background: #e2e8f0;
       color: #334155;
@@ -295,6 +301,62 @@
       margin-top: 4px;
     }
 
+    /* بطاقة متجر المكافآت المميزة في رئيسية الطفل */
+    .store-hero-banner {
+      background: linear-gradient(135deg, #7c3aed 0%, #ec4899 55%, #f59e0b 100%);
+      border-radius: 24px;
+      padding: 18px;
+      color: #fff;
+      margin-bottom: 14px;
+      box-shadow: 0 12px 26px -6px rgba(124, 58, 237, 0.38);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      cursor: pointer;
+      border: 3px solid #fde68a;
+      transition: transform 0.18s ease;
+    }
+
+    .store-hero-banner:active {
+      transform: scale(0.98);
+    }
+
+    .store-hero-icon {
+      font-size: 46px;
+      background: rgba(255, 255, 255, 0.22);
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .store-hero-badge {
+      display: inline-block;
+      background: #fef08a;
+      color: #854d0e;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+
+    .streak-banner {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+      border: 2px solid #fdba74;
+      border-radius: 18px;
+      padding: 12px 15px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
     /* بطاقة المهمة */
     .task-item {
       border: 2px solid #f1f5f9;
@@ -305,6 +367,12 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
+    }
+
+    .task-item.locked-item {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      opacity: 0.78;
     }
 
     .task-header {
@@ -353,6 +421,15 @@
       padding: 3px 9px;
       border-radius: 8px;
       font-weight: 600;
+    }
+
+    .tag-locked {
+      font-size: 12px;
+      color: #991b1b;
+      background: #fee2e2;
+      padding: 3px 9px;
+      border-radius: 8px;
+      font-weight: 700;
     }
 
     .preset-chips {
@@ -443,6 +520,29 @@
       text-align: center;
     }
 
+    /* نافذة منبثقة لطيفة */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 300;
+    }
+
+    .modal-card {
+      background: #fff;
+      border-radius: 26px;
+      padding: 24px 20px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      border: 3px solid #fde68a;
+    }
+
     .status-pill {
       padding: 3px 10px;
       border-radius: 999px;
@@ -485,6 +585,19 @@
 <body>
 
   <div id="toast" class="toast hidden"></div>
+
+  <!-- نافذة رسالة متجر المكافآت للحساب المجاني -->
+  <div id="storeLockedModal" class="modal-backdrop hidden" onclick="closeStoreLockedModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div style="font-size:52px; margin-bottom:8px;">🎁✨</div>
+      <h3 style="margin:0 0 8px; color:#7c3aed;">متجر المكافآت الرائع</h3>
+      <p style="font-size:14px; line-height:1.7; color:#475569; margin:0 0 16px;">
+        يا بطل! متجر المكافآت والهدايا المميزة متاح حصرياً للعائلات المشتركة 🌟<br>
+        اطلب من بابا أو ماما تفعيل الاشتراك لتتمكن من استبدال نقاطك بهدايا ومكافآت رائعة!
+      </p>
+      <button class="btn btn-primary btn-block" onclick="closeStoreLockedModal()">حسناً، فهمت! 👍</button>
+    </div>
+  </div>
 
   <div class="container">
     <!-- 1. شاشة البداية: اختيار نوع الحساب -->
@@ -530,7 +643,7 @@
         <button class="btn btn-primary btn-block" id="loginSubmitBtn" onclick="handleLogin()">دخول</button>
 
         <div id="parentRegisterBox" class="hidden" style="margin-top:16px; border-top:1px solid #e2e8f0; padding-top:14px;">
-          <p style="font-size:13px; color:#64748b; margin:0 0 10px;">ليس لديك حساب أبوين بعد؟ أنشئ حساباً جديداً:</p>
+          <p style="font-size:13px; color:#64748b; margin:0 0 10px;">ليس لديك حساب أبوين بعد؟ أنشئ حساباً جديداً (تجربة مجانية 7 أيام):</p>
           <div class="form-group">
             <input type="text" id="regParentUser" class="form-control" placeholder="اسم مستخدم جديد للأبوين" />
           </div>
@@ -548,6 +661,7 @@
         <div class="user-pill">
           <span id="childAvatar" style="font-size:22px;">🦁</span>
           <span id="childNameDisplay">البطل</span>
+          <span id="childStreakPill" class="points-badge hidden">🔥 0</span>
         </div>
         <button class="btn btn-ghost" onclick="logout()">خروج</button>
       </div>
@@ -563,6 +677,25 @@
             <div class="stat-label">💵 الرصيد المالي</div>
             <div class="stat-value" id="childBalanceVal">0 د.ع</div>
           </div>
+        </div>
+
+        <!-- شريط الالتزام الأسبوعي (يظهر للمشتركين) -->
+        <div id="childStreakBanner" class="streak-banner hidden">
+          <div>
+            <div style="font-weight:800; font-size:14px; color:#9a3412;">🔥 تحدي الالتزام الأسبوعي (7 أيام متواصلة)</div>
+            <div style="font-size:12px; color:#c2410c;" id="childStreakText">أكمل 7 أيام متتالية لتحصل على مكافأة إضافية!</div>
+          </div>
+          <span class="points-badge" id="childStreakCountBadge">0 / 7</span>
+        </div>
+
+        <!-- بطاقة متجر المكافآت المميزة في الصفحة الرئيسية -->
+        <div class="store-hero-banner" onclick="openChildRewardsStore()">
+          <div style="text-align:right;">
+            <span class="store-hero-badge">✨ استبدل نقاطك بهدايا</span>
+            <div style="font-size:20px; font-weight:800; margin-bottom:3px;">متجر المكافآت</div>
+            <div style="font-size:12px; opacity:0.95;">اكتشف الهدايا والمكافآت التي جهّزها لك الأهل!</div>
+          </div>
+          <div class="store-hero-icon">🎁</div>
         </div>
 
         <div class="card">
@@ -581,6 +714,18 @@
         </div>
       </div>
 
+      <!-- تبويب متجر المكافآت للطفل -->
+      <div id="childTab-store" class="hidden">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h3 style="margin:0;">🎁 متجر المكافآت</h3>
+            <span class="points-badge">نقاطك: <span id="storeChildPts">0</span></span>
+          </div>
+          <p style="font-size:13px; color:#64748b; margin-top:0;">اختر المكافأة التي تحبها واستبدلها بنقاطك مباشرة!</p>
+          <div id="childStoreList">جاري تحميل المكافآت...</div>
+        </div>
+      </div>
+
       <!-- تبويب المهام اليومية -->
       <div id="childTab-tasks" class="hidden">
         <div class="card">
@@ -594,14 +739,10 @@
       <div id="childTab-convert" class="hidden">
         <div class="card">
           <h3 style="margin-top:0;">🔄 تحويل النقاط إلى رصيد مالي</h3>
-          <p style="font-size:13px; color:#64748b;">نقاطك الحالية: <b id="convertAvailablePts">0</b> نقطة | الحد الأدنى: <b>200 نقطة</b> (كل 100 نقطة = 250 دينار)
-
-</p>
+          <p style="font-size:13px; color:#64748b;">نقاطك الحالية: <b id="convertAvailablePts">0</b> نقطة | الحد الأدنى: <b>200 نقطة</b> (كل 100 نقطة = 250 دينار)</p>
           <div class="form-group">
             <label>عدد النقاط المراد تحويلها</label>
-            <input type="number" id="convertPointsInput" class="form-control" min="200" step="10" placeholder="مثال: 200 أو جميع نقاطك" 
-
-oninput="updateConvertPreview()" />
+            <input type="number" id="convertPointsInput" class="form-control" min="200" step="10" placeholder="مثال: 200 أو جميع نقاطك" oninput="updateConvertPreview()" />
           </div>
           <div style="display:flex; gap:8px; margin-bottom:10px;">
             <button class="btn btn-ghost" style="flex:1;" onclick="fillAllPoints()">تحويل جميع النقاط</button>
@@ -637,19 +778,11 @@ oninput="updateConvertPreview()" />
 
       <!-- شريط التنقل السفلي للطفل -->
       <nav class="bottom-nav">
-        <button class="nav-btn active child-nav" data-ctab="home" onclick="switchChildTab('home')"><span class="nav-icon">🏠</span>
-
-الرئيسية</button>
+        <button class="nav-btn active child-nav" data-ctab="home" onclick="switchChildTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
         <button class="nav-btn child-nav" data-ctab="tasks" onclick="switchChildTab('tasks')"><span class="nav-icon">⭐</span>المهام</button>
-        <button class="nav-btn child-nav" data-ctab="convert" onclick="switchChildTab('convert')"><span class="nav-icon">🔄</span>
-
-تحويل</button>
-        <button class="nav-btn child-nav" data-ctab="withdraw" onclick="switchChildTab('withdraw')"><span class="nav-icon">💵</span>
-
-سحب</button>
-        <button class="nav-btn child-nav" data-ctab="history" onclick="switchChildTab('history')"><span class="nav-icon">📜</span>
-
-الحركات</button>
+        <button class="nav-btn child-nav" data-ctab="convert" onclick="switchChildTab('convert')"><span class="nav-icon">🔄</span>تحويل</button>
+        <button class="nav-btn child-nav" data-ctab="withdraw" onclick="switchChildTab('withdraw')"><span class="nav-icon">💵</span>سحب</button>
+        <button class="nav-btn child-nav" data-ctab="history" onclick="switchChildTab('history')"><span class="nav-icon">📜</span>الحركات</button>
       </nav>
     </div>
 
@@ -661,13 +794,19 @@ oninput="updateConvertPreview()" />
           <span id="parentNameDisplay">الأبوين</span>
           <span id="parentFamilyCode" class="tag-once"></span>
         </div>
-        <button class="btn btn-ghost" onclick="logout()">خروج</button>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <button id="supportWhatsappBtn" class="btn btn-whatsapp hidden" onclick="openSupportWhatsapp()">💬 الدعم</button>
+          <button class="btn btn-ghost" onclick="logout()">خروج</button>
+        </div>
       </div>
 
       <!-- الرئيسية للأبوين -->
       <div id="parentTab-home">
         <div class="card">
-          <h3 style="margin-top:0;">📊 نظرة عامة على العائلة</h3>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <h3 style="margin:0;">📊 نظرة عامة على العائلة</h3>
+            <span class="points-badge" id="familyChildrenCounter">0 / 1</span>
+          </div>
           <p style="font-size:14px; color:#475569; margin-top:0;">
             من هنا يمكنك متابعة نقاط وأرصدة الأطفال، إضافة طفل جديد، وإدارة مهام العائلة.
           </p>
@@ -704,13 +843,11 @@ oninput="updateConvertPreview()" />
         <div class="card">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <h4 style="margin:0;" id="taskFormHeading">📝 إضافة مهام العائلة</h4>
-            <span class="points-badge" id="familyTasksCounter">0 / 10</span>
+            <span class="points-badge" id="familyTasksCounter">0 / 1</span>
           </div>
           <p style="font-size:12px; color:#64748b; margin-top:0;">اقتراحات سريعة للتعبئة (يمكنك تعديلها قبل الحفظ):</p>
           <div class="preset-chips">
-            <button type="button" class="preset-chip" onclick="fillPresetTask('إنجاز الواجب المنزلي بالكامل قبل العاشرة مساءً', 150, false)">+ الواجب المنزلي (150)
-
-</button>
+            <button type="button" class="preset-chip" onclick="fillPresetTask('إنجاز الواجب المنزلي بالكامل قبل العاشرة مساءً', 150, false)">+ الواجب المنزلي (150)</button>
             <button type="button" class="preset-chip" onclick="fillPresetTask('سماع كلام الأهل والالتزام بالتوجيهات', 30, false)">+ سماع كلام الأهل (30)</button>
             <button type="button" class="preset-chip" onclick="fillPresetTask('إنجاز عمل بسيط يكلف به', 20, true)">+ عمل بسيط (20 🔁)</button>
             <button type="button" class="preset-chip" onclick="fillPresetTask('الحصول على علامة كاملة في الامتحان اليومي', 50, true)">+ امتحان يومي (50 🔁)</button>
@@ -734,6 +871,46 @@ oninput="updateConvertPreview()" />
           </div>
           <div id="parentTasksManageList" style="margin-top:14px;"></div>
         </div>
+
+        <!-- إدارة متجر المكافآت للأبوين (للمشتركين) -->
+        <div class="card" id="parentRewardsStoreCard">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <h4 style="margin:0;">🎁 متجر مكافآت العائلة</h4>
+            <span class="points-badge" id="familyRewardsCounter">0 / 10</span>
+          </div>
+          <div id="rewardsStoreLockedNotice" class="hidden" style="background:#fef3c7; color:#92400e; padding:12px; border-radius:14px; font-size:13px; font-weight:700;">
+            🔒 متجر المكافآت ميزة حصرية للمشتركين. فعّل اشتراكك لإضافة حتى 10 مكافآت رائعة لأطفالك!
+          </div>
+          <div id="rewardsStoreEditorBox">
+            <p style="font-size:12px; color:#64748b; margin-top:0;">أضف مكافآت غير مالية ليشتريها أطفالك بنقاطهم:</p>
+            <div class="preset-chips">
+              <button type="button" class="preset-chip" onclick="fillPresetReward('ساعة ألعاب إلكترونية إضافية', 150, '🎮')">+ ساعة ألعاب (150)</button>
+              <button type="button" class="preset-chip" onclick="fillPresetReward('نزهة أو رحلة ممتعة في نهاية الأسبوع', 300, '🎡')">+ نزهة ممتعة (300)</button>
+              <button type="button" class="preset-chip" onclick="fillPresetReward('وجبة مفضلة أو آيس كريم', 100, '🍦')">+ وجبة مفضلة (100)</button>
+            </div>
+            <div class="form-group">
+              <label>اسم المكافأة</label>
+              <input type="text" id="newRewardTitle" class="form-control" placeholder="مثال: ساعة لعب إضافية" />
+            </div>
+            <div class="form-group">
+              <label>سعر المكافأة بالنقاط</label>
+              <input type="number" id="newRewardPoints" class="form-control" placeholder="مثال: 150" />
+            </div>
+            <div class="form-group">
+              <label>أيقونة المكافأة</label>
+              <select id="newRewardIcon" class="form-control">
+                <option value="🎁">🎁 هدية مفاجئة</option>
+                <option value="🎮">🎮 ألعاب إلكترونية</option>
+                <option value="🍦">🍦 حلوى أو وجبة</option>
+                <option value="🎡">🎡 نزهة أو رحلة</option>
+                <option value="⚽">⚽ لعبة أو كرة</option>
+                <option value="📱">📱 وقت إضافي للشاشة</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="handleAddReward()">إضافة المكافأة للمتجر</button>
+            <div id="parentRewardsList" style="margin-top:12px;"></div>
+          </div>
+        </div>
       </div>
 
       <!-- طلبات إنجاز المهام -->
@@ -754,6 +931,23 @@ oninput="updateConvertPreview()" />
 
       <!-- إعدادات الأبوين والأطفال -->
       <div id="parentTab-settings" class="hidden">
+        <div class="card" id="parentStreakSettingCard">
+          <h3 style="margin-top:0;">🔥 مكافأة الالتزام الأسبوعي (7 أيام متواصلة)</h3>
+          <p style="font-size:13px; color:#64748b; margin-top:0;">
+            عندما ينجز الطفل مهامه 7 أيام متتالية دون انقطاع، يحصل تلقائياً على هذه النقاط الإضافية:
+          </p>
+          <div id="streakLockedNotice" class="hidden" style="background:#fef3c7; color:#92400e; padding:12px; border-radius:14px; font-size:13px; font-weight:700;">
+            🔒 ميزة مكافأة الالتزام الأسبوعي متاحة لحسابات المشتركين فقط.
+          </div>
+          <div id="streakEditorBox">
+            <div class="form-group">
+              <label>عدد نقاط المكافأة الأسبوعية</label>
+              <input type="number" id="parentStreakBonusInput" class="form-control" min="1" placeholder="مثال: 100" />
+            </div>
+            <button class="btn btn-primary btn-block" onclick="handleUpdateStreakBonus()">حفظ نقاط المكافأة الأسبوعية</button>
+          </div>
+        </div>
+
         <div class="card">
           <h3 style="margin-top:0;">⚙️ إعدادات حساب الأبوين</h3>
           <div class="form-group">
@@ -803,18 +997,10 @@ oninput="updateConvertPreview()" />
       </div>
 
       <nav class="bottom-nav">
-        <button class="nav-btn active parent-nav" data-ptab="home" onclick="switchParentTab('home')"><span class="nav-icon">🏠</span>
-
-الرئيسية</button>
-        <button class="nav-btn parent-nav" data-ptab="tasks" onclick="switchParentTab('tasks')"><span class="nav-icon">📋</span>طلبات 
-
-المهام</button>
-        <button class="nav-btn parent-nav" data-ptab="withdraws" onclick="switchParentTab('withdraws')"><span class="nav-icon">💰</span>
-
-طلبات السحب</button>
-        <button class="nav-btn parent-nav" data-ptab="settings" onclick="switchParentTab('settings')"><span class="nav-icon">⚙️</span>
-
-الإعدادات</button>
+        <button class="nav-btn active parent-nav" data-ptab="home" onclick="switchParentTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
+        <button class="nav-btn parent-nav" data-ptab="tasks" onclick="switchParentTab('tasks')"><span class="nav-icon">📋</span>طلبات المهام</button>
+        <button class="nav-btn parent-nav" data-ptab="withdraws" onclick="switchParentTab('withdraws')"><span class="nav-icon">💰</span>طلبات السحب</button>
+        <button class="nav-btn parent-nav" data-ptab="settings" onclick="switchParentTab('settings')"><span class="nav-icon">⚙️</span>الإعدادات</button>
       </nav>
     </div>
   </div>
@@ -828,6 +1014,7 @@ oninput="updateConvertPreview()" />
     let childDataCache = null;
     let parentTasksCache = [];
     let parentChildrenCache = [];
+    let currentSupportWhatsapp = "";
 
     function showToast(msg) {
       const el = document.getElementById("toast");
@@ -835,6 +1022,26 @@ oninput="updateConvertPreview()" />
       el.classList.remove("hidden");
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => el.classList.add("hidden"), 3200);
+    }
+
+    function updateSupportButtonUI(isSubscribed, whatsappNumber) {
+      const btn = document.getElementById("supportWhatsappBtn");
+      currentSupportWhatsapp = String(whatsappNumber || "").trim();
+      if (isSubscribed && currentSupportWhatsapp) {
+        btn.classList.remove("hidden");
+      } else {
+        btn.classList.add("hidden");
+      }
+    }
+
+    function openSupportWhatsapp() {
+      if (!currentSupportWhatsapp) return;
+      let cleanNum = currentSupportWhatsapp.replace(/\D/g, "");
+      if (cleanNum.startsWith("0")) {
+        cleanNum = "964" + cleanNum.slice(1);
+      }
+      const msg = encodeURIComponent(`مرحباً، أحتاج إلى الدعم الفني بخصوص حسابي (${currentUser ? currentUser.username : ""}).`);
+      window.open(`https://wa.me/${cleanNum}?text=${msg}`, "_blank");
     }
 
     async function callApi(payload) {
@@ -881,6 +1088,8 @@ oninput="updateConvertPreview()" />
       childDataCache = null;
       parentTasksCache = [];
       parentChildrenCache = [];
+      currentSupportWhatsapp = "";
+      updateSupportButtonUI(false, "");
       cancelEditTask();
       document.getElementById("childApp").classList.add("hidden");
       document.getElementById("parentApp").classList.add("hidden");
@@ -912,6 +1121,7 @@ oninput="updateConvertPreview()" />
           document.getElementById("parentNameDisplay").textContent = currentUser.username;
           document.getElementById("parentFamilyCode").textContent = currentUser.familyCode || "";
           document.getElementById("parentNewUser").value = currentUser.username;
+          updateSupportButtonUI(currentUser.isSubscribed, currentUser.supportWhatsapp);
           switchParentTab("home");
           await refreshParentDashboard();
         }
@@ -940,20 +1150,38 @@ oninput="updateConvertPreview()" />
 
     // --- وظائف حساب الطفل ---
     function switchChildTab(tab) {
-      ["home", "tasks", "convert", "withdraw", "history"].forEach(t => {
+      ["home", "tasks", "convert", "withdraw", "history", "store"].forEach(t => {
         document.getElementById("childTab-" + t).classList.toggle("hidden", t !== tab);
       });
       document.querySelectorAll(".child-nav").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.ctab === tab);
       });
-      if (currentUser && ["home", "tasks", "history"].includes(tab)) {
+      if (currentUser && ["home", "tasks", "history", "store"].includes(tab)) {
         refreshChildDashboard();
       }
     }
 
+    function openChildRewardsStore() {
+      if (!childDataCache || !childDataCache.isSubscribed) {
+        document.getElementById("storeLockedModal").classList.remove("hidden");
+        return;
+      }
+      switchChildTab("store");
+    }
+
+    function closeStoreLockedModal() {
+      document.getElementById("storeLockedModal").classList.add("hidden");
+    }
+
     async function refreshChildDashboard() {
       const res = await callApi({ action: "getChildDashboard", childId: currentUser.id });
-      if (!res.success) return;
+      if (!res.success) {
+        if (res.locked) {
+          showToast(res.message);
+          logout();
+        }
+        return;
+      }
 
       childDataCache = res;
       const c = res.child;
@@ -963,9 +1191,64 @@ oninput="updateConvertPreview()" />
       document.getElementById("childBalanceVal").textContent = Number(c.balance).toLocaleString() + " د.ع";
       document.getElementById("convertAvailablePts").textContent = c.points;
       document.getElementById("withdrawAvailableBal").textContent = Number(c.balance).toLocaleString();
+      document.getElementById("storeChildPts").textContent = c.points;
+
+      // عرض شارة وشريط الالتزام الأسبوعي للمشتركين فقط
+      const streakPill = document.getElementById("childStreakPill");
+      const streakBanner = document.getElementById("childStreakBanner");
+      if (res.isSubscribed) {
+        const sCount = Number(c.streakCount || 0);
+        streakPill.textContent = `🔥 ${sCount}`;
+        streakPill.classList.remove("hidden");
+        streakBanner.classList.remove("hidden");
+        document.getElementById("childStreakCountBadge").textContent = `${sCount} / 7 أيام`;
+        document.getElementById("childStreakText").textContent = `أكمل 7 أيام متتالية لتحصل على +${res.streakBonusPoints || 100} نقطة إضافية!`;
+      } else {
+        streakPill.classList.add("hidden");
+        streakBanner.classList.add("hidden");
+      }
 
       renderChildTasks(res.tasks, res.todayStatus);
+      renderChildStore(res.storeRewards, c.points);
       renderChildTransactions(res.transactions);
+    }
+
+    function renderChildStore(rewards, currentPts) {
+      const container = document.getElementById("childStoreList");
+      if (!rewards || !rewards.length) {
+        container.innerHTML = "<p style='color:#64748b;'>لم يقم الأبوان بإضافة مكافآت في المتجر بعد.</p>";
+        return;
+      }
+
+      container.innerHTML = rewards.map(r => {
+        const canAfford = Number(currentPts) >= Number(r.points);
+        return `
+          <div class="task-item">
+            <div class="task-header">
+              <div class="task-title" style="font-size:16px;">${r.icon || "🎁"} ${r.title}</div>
+              <span class="points-badge">${r.points} نقطة</span>
+            </div>
+            <div class="task-footer">
+              <span class="${canAfford ? "tag-repeat" : "tag-once"}">
+                ${canAfford ? "نقاطك تكفي للشراء ✨" : "اجمع المزيد من النقاط"}
+              </span>
+              <button class="btn btn-primary" ${canAfford ? "" : "disabled"} onclick="redeemStoreReward('${r.id}')">
+                استبدال 🎁
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    async function redeemStoreReward(rewardId) {
+      const res = await callApi({
+        action: "redeemReward",
+        childId: currentUser.id,
+        rewardId
+      });
+      showToast(res.message);
+      if (res.success) await refreshChildDashboard();
     }
 
     function renderChildTasks(tasks, todayStatus) {
@@ -1099,12 +1382,29 @@ oninput="updateConvertPreview()" />
 
       parentTasksCache = res.allTasks || [];
       parentChildrenCache = res.children || [];
-      document.getElementById("familyTasksCounter").textContent = `${res.familyTasksCount || 0} / ${res.maxFamilyTasks || 10}`;
+      updateSupportButtonUI(res.isSubscribed, res.supportWhatsapp);
+
+      document.getElementById("familyChildrenCounter").textContent = `${(res.children || []).length} / ${res.maxChildren || 1}`;
+      document.getElementById("familyTasksCounter").textContent = `${res.familyTasksCount || 0} / ${res.maxFamilyTasks || 1}`;
+      document.getElementById("familyRewardsCounter").textContent = `${(res.rewardsList || []).length} / 10`;
+
+      // تحديث واجهة متجر المكافآت للأبوين حسب حالة الاشتراك
+      document.getElementById("rewardsStoreLockedNotice").classList.toggle("hidden", !!res.isSubscribed);
+      document.getElementById("rewardsStoreEditorBox").classList.toggle("hidden", !res.isSubscribed);
+
+      // تحديث إعدادات الالتزام الأسبوعي للأبوين حسب حالة الاشتراك
+      document.getElementById("streakLockedNotice").classList.toggle("hidden", !!res.isSubscribed);
+      document.getElementById("streakEditorBox").classList.toggle("hidden", !res.isSubscribed);
+      if (res.streakBonusPoints) {
+        document.getElementById("parentStreakBonusInput").value = res.streakBonusPoints;
+      }
+
       renderParentChildren(res.children);
       renderParentChildEditor(res.children);
       renderPendingTasks(res.pendingTasks);
       renderPendingWithdraws(res.pendingWithdraws);
       renderParentTasksManage(res.allTasks);
+      renderParentRewardsManage(res.rewardsList);
     }
 
     function renderParentChildren(children) {
@@ -1114,10 +1414,11 @@ oninput="updateConvertPreview()" />
         return;
       }
       box.innerHTML = children.map(ch => `
-        <div class="task-item">
+        <div class="task-item ${ch.isLocked ? "locked-item" : ""}">
           <div class="task-header">
             <div>
               <b>${ch.avatar || "🦁"} ${ch.name}</b> <span style="font-size:12px; color:#64748b;">(@${ch.username})</span>
+              ${ch.isLocked ? `<span class="tag-locked">مقفل مؤقتاً 🔒</span>` : ""}
             </div>
             <span class="points-badge">${ch.points} نقطة</span>
           </div>
@@ -1283,7 +1584,7 @@ oninput="updateConvertPreview()" />
 
     function startEditTask(taskId) {
       const task = parentTasksCache.find(t => t.id === taskId);
-      if (!task || task.isFixed) return;
+      if (!task || task.isFixed || task.isLocked) return;
 
       document.getElementById("editingTaskId").value = task.id;
       document.getElementById("newTaskTitle").value = task.title;
@@ -1333,23 +1634,20 @@ oninput="updateConvertPreview()" />
         return;
       }
       box.innerHTML = tasks.map(t => `
-        <div class="task-item" style="padding:10px;">
+        <div class="task-item ${t.isLocked ? "locked-item" : ""}" style="padding:10px;">
           <div class="task-header">
             <div>
               <div style="font-size:13px; font-weight:700;">${t.title} (${t.points} نقطة)</div>
               <span class="${t.repeatable ? "tag-repeat" : "tag-once"}" style="font-size:11px;">
                 ${t.repeatable ? "أكثر من مرة باليوم" : "مرة واحدة باليوم"}
               </span>
+              ${t.isLocked ? `<span class="tag-locked" style="font-size:11px;">مقفلة لانتهاء الاشتراك 🔒</span>` : ""}
             </div>
             ${t.isFixed
               ? `<span class="tag-once">مهمة عامة من الإدارة</span>`
               : `<div style="display:flex; gap:6px;">
-                  <button class="btn btn-secondary" style="padding:5px 10px; font-size:12px;" onclick="startEditTask('${t.id}')">
-
-تعديل</button>
-                  <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteTaskItem('${t.id}')">
-
-حذف</button>
+                  ${t.isLocked ? "" : `<button class="btn btn-secondary" style="padding:5px 10px; font-size:12px;" onclick="startEditTask('${t.id}')">تعديل</button>`}
+                  <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteTaskItem('${t.id}')">حذف</button>
                  </div>`
             }
           </div>
@@ -1362,6 +1660,75 @@ oninput="updateConvertPreview()" />
         cancelEditTask();
       }
       const res = await callApi({ action: "manageTaskMaster", subAction: "delete", parentId: currentUser.id, taskId });
+      showToast(res.message);
+      if (res.success) await refreshParentDashboard();
+    }
+
+    // إدارة مكافآت المتجر في حساب الأبوين
+    function fillPresetReward(title, points, icon) {
+      document.getElementById("newRewardTitle").value = title;
+      document.getElementById("newRewardPoints").value = points;
+      document.getElementById("newRewardIcon").value = icon;
+    }
+
+    async function handleAddReward() {
+      const title = document.getElementById("newRewardTitle").value.trim();
+      const points = Number(document.getElementById("newRewardPoints").value);
+      const icon = document.getElementById("newRewardIcon").value;
+      if (!title || !points) return showToast("أدخل اسم المكافأة وسعرها بالنقاط");
+
+      const res = await callApi({
+        action: "manageRewardsStore",
+        subAction: "add",
+        parentId: currentUser.id,
+        title,
+        points,
+        icon
+      });
+      showToast(res.message);
+      if (res.success) {
+        document.getElementById("newRewardTitle").value = "";
+        document.getElementById("newRewardPoints").value = "";
+        await refreshParentDashboard();
+      }
+    }
+
+    function renderParentRewardsManage(rewards) {
+      const box = document.getElementById("parentRewardsList");
+      if (!rewards || !rewards.length) {
+        box.innerHTML = "<p style='font-size:13px; color:#64748b;'>لم تقم بإضافة أي مكافآت في المتجر بعد.</p>";
+        return;
+      }
+      box.innerHTML = rewards.map(r => `
+        <div class="task-item" style="padding:10px;">
+          <div class="task-header">
+            <div style="font-size:13px; font-weight:700;">${r.icon || "🎁"} ${r.title} (${r.points} نقطة)</div>
+            <button class="btn btn-danger" style="padding:5px 10px; font-size:12px;" onclick="deleteRewardItem('${r.id}')">حذف</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function deleteRewardItem(rewardId) {
+      const res = await callApi({
+        action: "manageRewardsStore",
+        subAction: "delete",
+        parentId: currentUser.id,
+        rewardId
+      });
+      showToast(res.message);
+      if (res.success) await refreshParentDashboard();
+    }
+
+    async function handleUpdateStreakBonus() {
+      const bonus = Number(document.getElementById("parentStreakBonusInput").value);
+      if (!bonus || bonus < 1) return showToast("أدخل عدد نقاط صحيح للمكافأة الأسبوعية");
+
+      const res = await callApi({
+        action: "updateStreakBonus",
+        parentId: currentUser.id,
+        bonus
+      });
       showToast(res.message);
       if (res.success) await refreshParentDashboard();
     }
