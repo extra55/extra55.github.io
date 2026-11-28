@@ -580,6 +580,90 @@
       font-weight: 700;
       cursor: pointer;
     }
+
+    /* صفحة الاشتراك والباقات */
+    .sub-status-card {
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 14px;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .sub-status-card.active-sub {
+      background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+      border: 2px solid #99f6e4;
+    }
+
+    .sub-status-card.free-sub {
+      background: linear-gradient(135deg, #334155 0%, #0f172a 100%);
+      border: 2px solid #cbd5e1;
+    }
+
+    .plan-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      border: 2px solid #e2e8f0;
+    }
+
+    .plan-card.vip-plan {
+      border: 3px solid #f59e0b;
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 35%);
+      position: relative;
+    }
+
+    .vip-ribbon {
+      display: inline-block;
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 12px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .plan-price {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 6px 0 12px;
+    }
+
+    .plan-price span {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #334155;
+      font-weight: 600;
+    }
+
+    .btn-vip {
+      background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      color: #fff;
+      font-size: 15px;
+      padding: 13px 16px;
+      box-shadow: 0 8px 20px -4px rgba(234, 88, 12, 0.45);
+    }
   </style>
 </head>
 <body>
@@ -596,6 +680,21 @@
         اطلب من بابا أو ماما تفعيل الاشتراك لتتمكن من استبدال نقاطك بهدايا ومكافآت رائعة!
       </p>
       <button class="btn btn-primary btn-block" onclick="closeStoreLockedModal()">حسناً، فهمت! 👍</button>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد تسجيل الخروج -->
+  <div id="logoutConfirmModal" class="modal-backdrop hidden" onclick="closeLogoutModal()">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div style="font-size:48px; margin-bottom:8px;">🚪</div>
+      <h3 style="margin:0 0 8px; color:#0f172a;">تأكيد تسجيل الخروج</h3>
+      <p style="font-size:15px; line-height:1.7; color:#475569; margin:0 0 18px;">
+        هل انت متأكد من تسجيل الخروج؟
+      </p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-danger" style="flex:1;" onclick="confirmLogout()">نعم، خروج</button>
+        <button class="btn btn-ghost" style="flex:1;" onclick="closeLogoutModal()">إلغاء</button>
+      </div>
     </div>
   </div>
 
@@ -880,6 +979,9 @@
           </div>
           <div id="rewardsStoreLockedNotice" class="hidden" style="background:#fef3c7; color:#92400e; padding:12px; border-radius:14px; font-size:13px; font-weight:700;">
             🔒 متجر المكافآت ميزة حصرية للمشتركين. فعّل اشتراكك لإضافة حتى 10 مكافآت رائعة لأطفالك!
+            <div style="margin-top:8px;">
+              <button type="button" class="btn btn-primary" style="padding:6px 12px; font-size:12px;" onclick="switchParentTab('subscription')">👑 عرض باقات الاشتراك</button>
+            </div>
           </div>
           <div id="rewardsStoreEditorBox">
             <p style="font-size:12px; color:#64748b; margin-top:0;">أضف مكافآت غير مالية ليشتريها أطفالك بنقاطهم:</p>
@@ -929,6 +1031,57 @@
         </div>
       </div>
 
+      <!-- صفحة الاشتراك والباقات للأبوين -->
+      <div id="parentTab-subscription" class="hidden">
+        <div id="parentSubStatusCard" class="sub-status-card free-sub">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <div>
+              <div style="font-size:12px; opacity:0.85;">حالة اشتراك العائلة الحالية</div>
+              <div id="subCurrentPlanTitle" style="font-size:18px; font-weight:800; margin-top:2px;">الباقة الأساسية (مجاناً)</div>
+            </div>
+            <span id="subStatusBadge" class="points-badge">غير مشترك</span>
+          </div>
+          <div id="subExpiryText" style="font-size:13px; margin-top:8px; opacity:0.95;">
+            اشترك الآن لتفعيل جميع ميزات العائلة بلا قيود.
+          </div>
+        </div>
+
+        <!-- باقة الأبطال بلس (VIP) -->
+        <div class="plan-card vip-plan">
+          <span class="vip-ribbon">👑 الباقة الموصى بها للعائلات</span>
+          <h3 style="margin:0; font-size:20px; color:#0f172a;">باقة الأبطال بلس (VIP)</h3>
+          <div class="plan-price"><span id="vipPlanPriceDisplay" style="font-size:24px; font-weight:800; color:#ea580c;">3,000</span> <span>دينار عراقي / شهرياً</span></div>
+          <ul class="plan-features">
+            <li>✅ إضافة حتى <b>12 حساب طفل</b> في نفس العائلة</li>
+            <li>✅ إضافة حتى <b>10 مهام مخصصة</b> خاصة بعائلتك</li>
+            <li>✅ تفعيل <b>متجر المكافآت والهدايا</b> (حتى 10 مكافآت)</li>
+            <li>✅ تفعيل <b>مكافأة الالتزام الأسبوعي</b> (7 أيام متواصلة)</li>
+            <li>✅ عرض آخر <b>10 حركات</b> في سجل كل طفل</li>
+            <li>✅ <b>دعم فني مباشر عبر واتساب</b> على مدار الساعة</li>
+          </ul>
+          <button type="button" class="btn btn-vip btn-block" id="subscribeNowBtn" onclick="subscribeViaWhatsapp()">
+            👑 اشترك الآن عبر واتساب
+          </button>
+        </div>
+
+        <!-- الباقة الأساسية المجانية -->
+        <div class="plan-card">
+          <h3 style="margin:0; font-size:18px; color:#334155;">الباقة الأساسية</h3>
+          <div class="plan-price" style="font-size:20px; color:#16a34a;">مجاناً <span>للأبد</span></div>
+          <ul class="plan-features">
+            <li>✔️ حساب <b>طفل واحد (1)</b> فقط</li>
+            <li>✔️ جميع المهام اليومية العامة متاحة</li>
+            <li>✔️ إضافة <b>مهمة واحدة (1)</b> مخصصة للعائلة</li>
+            <li>✔️ تحويل النقاط إلى دينار وطلب سحب الأموال</li>
+            <li>🔒 متجر المكافآت والهدايا (مقفل)</li>
+            <li>🔒 مكافأة الالتزام الأسبوعي (مقفلة)</li>
+          </ul>
+          <button type="button" class="btn btn-ghost btn-block" disabled id="freePlanStatusBtn">
+            الباقة الأساسية
+          </button>
+        </div>
+      </div>
+
       <!-- إعدادات الأبوين والأطفال -->
       <div id="parentTab-settings" class="hidden">
         <div class="card" id="parentStreakSettingCard">
@@ -938,6 +1091,9 @@
           </p>
           <div id="streakLockedNotice" class="hidden" style="background:#fef3c7; color:#92400e; padding:12px; border-radius:14px; font-size:13px; font-weight:700;">
             🔒 ميزة مكافأة الالتزام الأسبوعي متاحة لحسابات المشتركين فقط.
+            <div style="margin-top:8px;">
+              <button type="button" class="btn btn-primary" style="padding:6px 12px; font-size:12px;" onclick="switchParentTab('subscription')">👑 عرض باقات الاشتراك</button>
+            </div>
           </div>
           <div id="streakEditorBox">
             <div class="form-group">
@@ -1000,6 +1156,7 @@
         <button class="nav-btn active parent-nav" data-ptab="home" onclick="switchParentTab('home')"><span class="nav-icon">🏠</span>الرئيسية</button>
         <button class="nav-btn parent-nav" data-ptab="tasks" onclick="switchParentTab('tasks')"><span class="nav-icon">📋</span>طلبات المهام</button>
         <button class="nav-btn parent-nav" data-ptab="withdraws" onclick="switchParentTab('withdraws')"><span class="nav-icon">💰</span>طلبات السحب</button>
+        <button class="nav-btn parent-nav" data-ptab="subscription" onclick="switchParentTab('subscription')"><span class="nav-icon">👑</span>الاشتراك</button>
         <button class="nav-btn parent-nav" data-ptab="settings" onclick="switchParentTab('settings')"><span class="nav-icon">⚙️</span>الإعدادات</button>
       </nav>
     </div>
@@ -1015,6 +1172,106 @@
     let parentTasksCache = [];
     let parentChildrenCache = [];
     let currentSupportWhatsapp = "";
+    let currentSalesWhatsapp = "07803342472";
+    let currentSubscriptionPrice = "3000";
+    let currentViewState = { view: "gate", role: null, tab: "home" };
+    let isHandlingPopState = false;
+
+    function formatDisplayDate(dateVal) {
+      if (!dateVal) return "";
+      const str = String(dateVal).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+      if (/^\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}/.test(str)) return str.slice(0, 16);
+      const parsed = new Date(str);
+      if (!isNaN(parsed.getTime()) && str.includes("-")) {
+        const y = parsed.getFullYear();
+        const m = String(parsed.getMonth() + 1).padStart(2, "0");
+        const d = String(parsed.getDate()).padStart(2, "0");
+        const hasTime = /T|\d{2}:\d{2}/.test(str);
+        if (!hasTime) return `${y}-${m}-${d}`;
+        const hh = String(parsed.getHours()).padStart(2, "0");
+        const mm = String(parsed.getMinutes()).padStart(2, "0");
+        return `${y}-${m}-${d} ${hh}:${mm}`;
+      }
+      return str;
+    }
+
+    function pushNavState(view, role = null, tab = "home") {
+      currentViewState = { view, role, tab };
+      if (!isHandlingPopState) {
+        try {
+          history.pushState({ view, role, tab }, "");
+        } catch (e) {}
+      }
+    }
+
+    window.addEventListener("load", () => {
+      try {
+        history.replaceState({ view: "gate", role: null, tab: "home" }, "");
+      } catch (e) {}
+    });
+
+    window.addEventListener("popstate", (event) => {
+      const logoutModal = document.getElementById("logoutConfirmModal");
+      if (logoutModal && !logoutModal.classList.contains("hidden")) {
+        closeLogoutModal();
+        pushNavState(currentViewState.view, currentViewState.role, currentViewState.tab);
+        return;
+      }
+
+      const storeModal = document.getElementById("storeLockedModal");
+      if (storeModal && !storeModal.classList.contains("hidden")) {
+        closeStoreLockedModal();
+        pushNavState(currentViewState.view, currentViewState.role, currentViewState.tab);
+        return;
+      }
+
+      isHandlingPopState = true;
+      try {
+        const state = event.state;
+
+        if (currentUser) {
+          if (selectedRole === "child") {
+            if (state && state.view === "child" && state.tab && state.tab !== currentViewState.tab) {
+              switchChildTab(state.tab, true);
+              return;
+            }
+            if (currentViewState.tab !== "home") {
+              switchChildTab("home", true);
+              pushNavState("child", "child", "home");
+              return;
+            }
+            pushNavState("child", "child", "home");
+            logout();
+            return;
+          } else if (selectedRole === "parent") {
+            if (state && state.view === "parent" && state.tab && state.tab !== currentViewState.tab) {
+              switchParentTab(state.tab, true);
+              return;
+            }
+            if (currentViewState.tab !== "home") {
+              switchParentTab("home", true);
+              pushNavState("parent", "parent", "home");
+              return;
+            }
+            pushNavState("parent", "parent", "home");
+            logout();
+            return;
+          }
+        } else {
+          if (currentViewState.view === "login") {
+            backToGate(true);
+            return;
+          }
+          try {
+            history.pushState({ view: "gate", role: null, tab: "home" }, "");
+          } catch (e) {}
+          showToast("اضغط مرة أخرى أو اختر نوع الحساب للمتابعة");
+        }
+      } finally {
+        isHandlingPopState = false;
+      }
+    });
 
     function showToast(msg) {
       const el = document.getElementById("toast");
@@ -1057,7 +1314,7 @@
       return await res.json();
     }
 
-    function openLogin(role) {
+    function openLogin(role, skipHistory = false) {
       selectedRole = role;
       document.getElementById("gateScreen").classList.add("hidden");
       document.getElementById("loginScreen").classList.remove("hidden");
@@ -1075,15 +1332,39 @@
         document.getElementById("loginHeading").textContent = "دخول الأبوين";
         document.getElementById("parentRegisterBox").classList.remove("hidden");
       }
+
+      if (!skipHistory) {
+        pushNavState("login", role, "home");
+      } else {
+        currentViewState = { view: "login", role, tab: "home" };
+      }
     }
 
-    function backToGate() {
+    function backToGate(skipHistory = false) {
       document.body.classList.remove("parent-mode");
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("gateScreen").classList.remove("hidden");
+      if (!skipHistory) {
+        pushNavState("gate", null, "home");
+      } else {
+        currentViewState = { view: "gate", role: null, tab: "home" };
+      }
     }
 
     function logout() {
+      document.getElementById("logoutConfirmModal").classList.remove("hidden");
+    }
+
+    function closeLogoutModal() {
+      document.getElementById("logoutConfirmModal").classList.add("hidden");
+    }
+
+    function confirmLogout() {
+      closeLogoutModal();
+      performLogout();
+    }
+
+    function performLogout() {
       currentUser = null;
       childDataCache = null;
       parentTasksCache = [];
@@ -1149,13 +1430,18 @@
     }
 
     // --- وظائف حساب الطفل ---
-    function switchChildTab(tab) {
+    function switchChildTab(tab, skipHistory = false) {
       ["home", "tasks", "convert", "withdraw", "history", "store"].forEach(t => {
         document.getElementById("childTab-" + t).classList.toggle("hidden", t !== tab);
       });
       document.querySelectorAll(".child-nav").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.ctab === tab);
       });
+      if (!skipHistory) {
+        pushNavState("child", "child", tab);
+      } else {
+        currentViewState = { view: "child", role: "child", tab };
+      }
       if (currentUser && ["home", "tasks", "history", "store"].includes(tab)) {
         refreshChildDashboard();
       }
@@ -1178,7 +1464,7 @@
       if (!res.success) {
         if (res.locked) {
           showToast(res.message);
-          logout();
+          performLogout();
         }
         return;
       }
@@ -1351,7 +1637,7 @@
             <div>
               <b>${tr.type}</b>
               <div style="font-size:13px; color:#475569;">${tr.details}</div>
-              <div style="font-size:11px; color:#94a3b8;">${tr.date}</div>
+              <div style="font-size:11px; color:#94a3b8;">${formatDisplayDate(tr.date)}</div>
             </div>
             <span class="status-pill status-${tr.status}">${tr.status}</span>
           </div>
@@ -1364,13 +1650,18 @@
     }
 
     // --- وظائف حساب الأبوين ---
-    function switchParentTab(tab) {
-      ["home", "tasks", "withdraws", "settings"].forEach(t => {
+    function switchParentTab(tab, skipHistory = false) {
+      ["home", "tasks", "withdraws", "subscription", "settings"].forEach(t => {
         document.getElementById("parentTab-" + t).classList.toggle("hidden", t !== tab);
       });
       document.querySelectorAll(".parent-nav").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.ptab === tab);
       });
+      if (!skipHistory) {
+        pushNavState("parent", "parent", tab);
+      } else {
+        currentViewState = { view: "parent", role: "parent", tab };
+      }
       if (currentUser) {
         refreshParentDashboard();
       }
@@ -1383,6 +1674,9 @@
       parentTasksCache = res.allTasks || [];
       parentChildrenCache = res.children || [];
       updateSupportButtonUI(res.isSubscribed, res.supportWhatsapp);
+      if (res.salesWhatsapp) currentSalesWhatsapp = String(res.salesWhatsapp).trim();
+      if (res.subscriptionPrice) currentSubscriptionPrice = String(res.subscriptionPrice).trim();
+      renderParentSubscriptionUI(res);
 
       document.getElementById("familyChildrenCounter").textContent = `${(res.children || []).length} / ${res.maxChildren || 1}`;
       document.getElementById("familyTasksCounter").textContent = `${res.familyTasksCount || 0} / ${res.maxFamilyTasks || 1}`;
@@ -1405,6 +1699,62 @@
       renderPendingWithdraws(res.pendingWithdraws);
       renderParentTasksManage(res.allTasks);
       renderParentRewardsManage(res.rewardsList);
+    }
+
+    function renderParentSubscriptionUI(res) {
+      const priceNum = Number(res.subscriptionPrice || currentSubscriptionPrice || 3000);
+      const priceFormatted = !isNaN(priceNum) ? priceNum.toLocaleString() : (res.subscriptionPrice || "3,000");
+      const priceEl = document.getElementById("vipPlanPriceDisplay");
+      if (priceEl) priceEl.textContent = priceFormatted;
+
+      const statusCard = document.getElementById("parentSubStatusCard");
+      const titleEl = document.getElementById("subCurrentPlanTitle");
+      const badgeEl = document.getElementById("subStatusBadge");
+      const expiryEl = document.getElementById("subExpiryText");
+      const subBtn = document.getElementById("subscribeNowBtn");
+      const freeBtn = document.getElementById("freePlanStatusBtn");
+
+      const endDate = res.subscriptionEndDate || res.expiryDate || "";
+
+      if (res.isSubscribed) {
+        statusCard.classList.remove("free-sub");
+        statusCard.classList.add("active-sub");
+        titleEl.textContent = "باقة الأبطال بلس (VIP)";
+        badgeEl.textContent = "مفعّلة ✅";
+        expiryEl.textContent = endDate
+          ? `اشتراكك نشط حتى تاريخ: ${endDate}`
+          : "اشتراكك نشط ومفعّل بالكامل.";
+        subBtn.textContent = "🔄 تجديد أو تمديد الاشتراك عبر واتساب";
+        freeBtn.textContent = "الباقة الأساسية";
+      } else {
+        statusCard.classList.remove("active-sub");
+        statusCard.classList.add("free-sub");
+        titleEl.textContent = "الباقة الأساسية (مجاناً)";
+        badgeEl.textContent = res.subscriptionStatus === "Expired" ? "منتهي ⏳" : "مجاني";
+        expiryEl.textContent = endDate
+          ? `انتهت صلاحية الاشتراك بتاريخ: ${endDate}. اشترك الآن لاستعادة جميع الميزات.`
+          : "أنت حالياً على الباقة المجانية. اشترك في باقة الأبطال بلس لفتح جميع الميزات.";
+        subBtn.textContent = "👑 اشترك الآن عبر واتساب";
+        freeBtn.textContent = "باقتك الحالية";
+      }
+    }
+
+    function subscribeViaWhatsapp() {
+      let cleanNum = String(currentSalesWhatsapp || "07803342472").replace(/\D/g, "");
+      if (cleanNum.startsWith("0")) {
+        cleanNum = "964" + cleanNum.slice(1);
+      }
+      const famCode = currentUser && currentUser.familyCode ? currentUser.familyCode : "";
+      const uName = currentUser && currentUser.username ? currentUser.username : "";
+      const priceText = Number(currentSubscriptionPrice || 3000).toLocaleString();
+      const msg = encodeURIComponent(
+        `مرحباً، أرغب بالاشتراك في باقة الأبطال بلس (VIP) بقيمة ${priceText} دينار شهرياً.
+` +
+        `اسم الحساب: ${uName}
+` +
+        `كود العائلة: ${famCode}`
+      );
+      window.open(`https://wa.me/${cleanNum}?text=${msg}`, "_blank");
     }
 
     function renderParentChildren(children) {
@@ -1528,7 +1878,7 @@
             <div>
               <b>الطفل: ${r.childName}</b>
               <div style="font-size:14px;">${r.taskTitle}</div>
-              <div style="font-size:12px; color:#64748b;">التاريخ: ${r.date}</div>
+              <div style="font-size:12px; color:#64748b;">التاريخ: ${formatDisplayDate(r.date)}</div>
             </div>
             <span class="points-badge">+${r.points} نقطة</span>
           </div>
@@ -1558,7 +1908,7 @@
             <div>
               <b>الطفل: ${w.childName}</b>
               <div style="font-size:15px; font-weight:800; color:#0369a1;">المبلغ المطلوب: ${Number(w.amount).toLocaleString()} دينار</div>
-              <div style="font-size:12px; color:#64748b;">التاريخ: ${w.date}</div>
+              <div style="font-size:12px; color:#64748b;">التاريخ: ${formatDisplayDate(w.date)}</div>
             </div>
           </div>
           <div style="display:flex; gap:8px;">
